@@ -21,7 +21,7 @@ namespace LastMinuteWebApp.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, CustomRole, int, CustomUserLogin, CustomUserRole, CustomUserClaim>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection")
+            : base("name=GrouponDBEntities2")
         {
         }
 
@@ -34,14 +34,16 @@ namespace LastMinuteWebApp.Models
         {
             base.OnModelCreating(modelBuilder);
 
-            /*modelBuilder.Entity<IdentityUser>().ToTable("ClientPrivate").Property(p => p.Id).HasColumnName("id");
+            modelBuilder.Entity<IdentityUser>().ToTable("ClientPrivate");
+            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate");
+            modelBuilder.Entity<IdentityUser>().ToTable("ClientPrivate").Property(p => p.Id).HasColumnName("id");
             modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.Id).HasColumnName("id");
             modelBuilder.Entity<IdentityUser>().ToTable("ClientPrivate").Property(p => p.Email).HasColumnName("email");
             modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.Email).HasColumnName("email");
             modelBuilder.Entity<IdentityUser>().ToTable("ClientPrivate").Property(p => p.PasswordHash).HasColumnName("haslo");
-            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.PasswordHash).HasColumnName("haslo");*/
+            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.PasswordHash).HasColumnName("haslo");
 
-            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate");
+
             modelBuilder.Entity<CustomUserRole>().ToTable("MyUserRoles");
             modelBuilder.Entity<CustomUserLogin>().ToTable("MyUserLogins");
             modelBuilder.Entity<CustomUserClaim>().ToTable("MyUserClaims");

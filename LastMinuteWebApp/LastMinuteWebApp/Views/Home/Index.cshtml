@@ -1,34 +1,48 @@
-﻿@model IEnumerable<LastMinuteWebApp.Models.Offert>
+﻿@model PagedList.IPagedList<LastMinuteWebApp.Models.Offert>
+@using PagedList.Mvc;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />    
+
 @{
     ViewBag.Title = "Home Page";
 }
 
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>LASTMINUTE</h1>
+    <p class="lead">Krótki opis strony. Prototyp aplikacji webowej.</p>
+    
 </div>
 
+<h2>Offerts</h2>
 
+@using (Html.BeginForm("Index", "Home", FormMethod.Get))
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
 
 
 <table class="table">
     <tr>
+       
+
         <th>
-            @Html.DisplayNameFor(model => model.title)
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.description)
+            Description
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.price)
+            Price
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.quantity)
-        </th>
+            Quantity
+        </th>       
         <th>
-            @Html.DisplayNameFor(model => model.deadlineTime)
-        </th>
+            @Html.ActionLink("DeadlineTime", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>  
         <th></th>
     </tr>
 
@@ -48,10 +62,16 @@
                 @Html.DisplayFor(modelItem => item.quantity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.deadlineTime)
+                @Html.ValueFor(modelItem => item.deadlineTime, "{0:dd/MM/yyyy}")
             </td>
 
         </tr>
     }
 
 </table>
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

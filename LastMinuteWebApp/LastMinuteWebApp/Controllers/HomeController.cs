@@ -4,16 +4,61 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using LastMinuteWebApp.Models;
+using PagedList;
 
 namespace LastMinuteWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        GrouponDBEntities DbOffert = new GrouponDBEntities();
+        GrouponDBEntities2 DbOffert = new GrouponDBEntities2();
 
-        public ActionResult Index()
+
+
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(DbOffert.Offert.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+
+            var offerts = from s in DbOffert.Offert
+                           select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                offerts = offerts.Where(s => s.title.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    offerts = offerts.OrderByDescending(s => s.title);
+                    break;
+                case "Date":
+                    offerts = offerts.OrderBy(s => s.deadlineTime);
+                    break;
+                case "date_desc":
+                    offerts = offerts.OrderByDescending(s => s.deadlineTime);
+                    break;
+                default:
+                    offerts = offerts.OrderByDescending(s => s.price);
+                    break;
+            }
+
+            int pageSize = 8;
+            int pageNumber = (page ?? 1);
+            return View(offerts.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult About()

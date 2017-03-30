@@ -13,10 +13,10 @@ namespace LastMinuteWebApp.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class GrouponDBEntities : DbContext
+    public partial class GrouponDBEntities2 : DbContext
     {
-        public GrouponDBEntities()
-            : base("name=GrouponDBEntities")
+        public GrouponDBEntities2()
+            : base("name=GrouponDBEntities2")
         {
         }
     
@@ -25,6 +25,11 @@ namespace LastMinuteWebApp.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<ClientBusiness> ClientBusiness { get; set; }
+        public virtual DbSet<ClientPrivate> ClientPrivate { get; set; }
+        public virtual DbSet<FavouriteClientBusiness> FavouriteClientBusiness { get; set; }
+        public virtual DbSet<FavouriteOffert> FavouriteOffert { get; set; }
         public virtual DbSet<Offert> Offert { get; set; }
+        public virtual DbSet<Reservation> Reservation { get; set; }
     }
 }

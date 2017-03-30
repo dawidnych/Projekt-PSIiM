@@ -81,8 +81,16 @@
       <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.Entity.6.9.8\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.9\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -212,25 +220,40 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ClientBusiness.cs">
+      <DependentUpon>GrouponDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ClientPrivate.cs">
+      <DependentUpon>GrouponDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FavouriteClientBusiness.cs">
+      <DependentUpon>GrouponDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FavouriteOffert.cs">
+      <DependentUpon>GrouponDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GrouponDBModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GrouponDBModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GrouponDBModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GrouponDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GrouponDBModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GrouponDBModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Offert.cs">
-      <DependentUpon>OffertModel.tt</DependentUpon>
+      <DependentUpon>GrouponDBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\OffertModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>OffertModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\OffertModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>OffertModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\OffertModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>OffertModel.edmx</DependentUpon>
+    <Compile Include="Models\Reservation.cs">
+      <DependentUpon>GrouponDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -238,31 +261,32 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\OffertModel.Context.tt">
+    <Content Include="Models\GrouponDBModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>OffertModel.edmx</DependentUpon>
-      <LastGenOutput>OffertModel.Context.cs</LastGenOutput>
+      <DependentUpon>GrouponDBModel.edmx</DependentUpon>
+      <LastGenOutput>GrouponDBModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\OffertModel.tt">
+    <Content Include="Models\GrouponDBModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>OffertModel.edmx</DependentUpon>
-      <LastGenOutput>OffertModel.cs</LastGenOutput>
+      <DependentUpon>GrouponDBModel.edmx</DependentUpon>
+      <LastGenOutput>GrouponDBModel.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EntityDeploy Include="Models\OffertModel.edmx">
+    <EntityDeploy Include="Models\GrouponDBModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>OffertModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>GrouponDBModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\OffertModel.edmx.diagram">
-      <DependentUpon>OffertModel.edmx</DependentUpon>
+    <Content Include="Models\GrouponDBModel.edmx.diagram">
+      <DependentUpon>GrouponDBModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

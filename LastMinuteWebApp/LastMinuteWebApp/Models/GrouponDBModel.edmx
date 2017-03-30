@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GrouponDBModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ClientBusiness">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="NIP" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ClientPrivate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="haslo" Type="longtext" Nullable="false" />
+          <Property Name="idClientBusiness" Type="uint" />
+        </EntityType>
+        <EntityType Name="FavouriteClientBusiness">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idClientPrivate" Type="uint" Nullable="false" />
+          <Property Name="idClientBusiness" Type="uint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FavouriteOffert">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idClientPrivate" Type="uint" Nullable="false" />
+          <Property Name="idOffert" Type="uint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Offert">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idClientBusiness" Type="int" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="price" Type="uint" Nullable="false" />
+          <Property Name="quantity" Type="uint" Nullable="false" />
+          <Property Name="deadlineTime" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Reservation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idClientPrivate" Type="uint" Nullable="false" />
+          <Property Name="idOffert" Type="uint" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="GrouponDBModelStoreContainer">
+          <EntitySet Name="ClientBusiness" EntityType="Self.ClientBusiness" Schema="GrouponDB" store:Type="Tables" />
+          <EntitySet Name="ClientPrivate" EntityType="Self.ClientPrivate" Schema="GrouponDB" store:Type="Tables" />
+          <EntitySet Name="FavouriteClientBusiness" EntityType="Self.FavouriteClientBusiness" Schema="GrouponDB" store:Type="Tables" />
+          <EntitySet Name="FavouriteOffert" EntityType="Self.FavouriteOffert" Schema="GrouponDB" store:Type="Tables" />
+          <EntitySet Name="Offert" EntityType="Self.Offert" Schema="GrouponDB" store:Type="Tables" />
+          <EntitySet Name="Reservation" EntityType="Self.Reservation" Schema="GrouponDB" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GrouponDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ClientBusiness">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NIP" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ClientPrivate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="haslo" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idClientBusiness" Type="Int64" />
+        </EntityType>
+        <EntityType Name="FavouriteClientBusiness">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idClientPrivate" Type="Int64" Nullable="false" />
+          <Property Name="idClientBusiness" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FavouriteOffert">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idClientPrivate" Type="Int64" Nullable="false" />
+          <Property Name="idOffert" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Offert">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idClientBusiness" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="price" Type="Int64" Nullable="false" />
+          <Property Name="quantity" Type="Int64" Nullable="false" />
+          <Property Name="deadlineTime" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Reservation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idClientPrivate" Type="Int64" Nullable="false" />
+          <Property Name="idOffert" Type="Int64" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="GrouponDBEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ClientBusiness" EntityType="Self.ClientBusiness" />
+          <EntitySet Name="ClientPrivate" EntityType="Self.ClientPrivate" />
+          <EntitySet Name="FavouriteClientBusiness" EntityType="Self.FavouriteClientBusiness" />
+          <EntitySet Name="FavouriteOffert" EntityType="Self.FavouriteOffert" />
+          <EntitySet Name="Offert" EntityType="Self.Offert" />
+          <EntitySet Name="Reservation" EntityType="Self.Reservation" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GrouponDBModelStoreContainer" CdmEntityContainer="GrouponDBEntities2">
+          <EntitySetMapping Name="ClientBusiness">
+            <EntityTypeMapping TypeName="GrouponDBModel.ClientBusiness">
+              <MappingFragment StoreEntitySet="ClientBusiness">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="NIP" ColumnName="NIP" />
+                <ScalarProperty Name="title" ColumnName="title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientPrivate">
+            <EntityTypeMapping TypeName="GrouponDBModel.ClientPrivate">
+              <MappingFragment StoreEntitySet="ClientPrivate">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="haslo" ColumnName="haslo" />
+                <ScalarProperty Name="idClientBusiness" ColumnName="idClientBusiness" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FavouriteClientBusiness">
+            <EntityTypeMapping TypeName="GrouponDBModel.FavouriteClientBusiness">
+              <MappingFragment StoreEntitySet="FavouriteClientBusiness">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idClientPrivate" ColumnName="idClientPrivate" />
+                <ScalarProperty Name="idClientBusiness" ColumnName="idClientBusiness" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FavouriteOffert">
+            <EntityTypeMapping TypeName="GrouponDBModel.FavouriteOffert">
+              <MappingFragment StoreEntitySet="FavouriteOffert">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idClientPrivate" ColumnName="idClientPrivate" />
+                <ScalarProperty Name="idOffert" ColumnName="idOffert" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Offert">
+            <EntityTypeMapping TypeName="GrouponDBModel.Offert">
+              <MappingFragment StoreEntitySet="Offert">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idClientBusiness" ColumnName="idClientBusiness" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="deadlineTime" ColumnName="deadlineTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reservation">
+            <EntityTypeMapping TypeName="GrouponDBModel.Reservation">
+              <MappingFragment StoreEntitySet="Reservation">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idClientPrivate" ColumnName="idClientPrivate" />
+                <ScalarProperty Name="idOffert" ColumnName="idOffert" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
