@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_offert_description"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.wojciech.grouponlastminute.OffertDescription">
+
+    <TextView
+        android:text="Offert Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/offertTitle"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="24dp"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="24sp" />
+
+    <TextView
+        android:text="Company"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/companyName"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/offertTitle"
+        app:layout_constraintLeft_toLeftOf="@+id/offertTitle"
+        android:textAppearance="@style/TextAppearance.AppCompat" />
+
+    <TextView
+        android:text="Decription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/description"
+        android:layout_marginTop="56dp"
+        app:layout_constraintTop_toBottomOf="@+id/offertTitle"
+        app:layout_constraintLeft_toLeftOf="@+id/offertTitle"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="18sp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="16dp"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <TextView
+        android:text="Ilość miejsc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/descIloscMiejsc"
+        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        app:layout_constraintLeft_toLeftOf="@+id/description"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="18sp" />
+
+    <TextView
+        android:text="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/quantity"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:layout_marginStart="24dp"
+        app:layout_constraintLeft_toRightOf="@+id/descIloscMiejsc"
+        android:layout_marginLeft="24dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/descIloscMiejsc"
+        android:textSize="18sp" />
+
+    <TextView
+        android:text="Deadline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/descDeadline"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/quantity"
+        app:layout_constraintLeft_toLeftOf="@+id/description"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="18sp" />
+
+    <TextView
+        android:text="10.10.2017"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/data"
+        app:layout_constraintBottom_toBottomOf="@+id/descDeadline"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/descIloscMiejsc"
+        android:layout_marginStart="24dp"
+        app:layout_constraintLeft_toRightOf="@+id/descDeadline"
+        android:layout_marginLeft="24dp"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="18sp" />
+
+    <Button
+        android:text="Rezerwuj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="307dp"
+        android:id="@+id/rezerwujButton"
+        android:layout_marginStart="40dp"
+        app:layout_constraintLeft_toRightOf="@+id/data"
+        android:layout_marginLeft="40dp"
+        android:elevation="0dp" />
+</android.support.constraint.ConstraintLayout>
