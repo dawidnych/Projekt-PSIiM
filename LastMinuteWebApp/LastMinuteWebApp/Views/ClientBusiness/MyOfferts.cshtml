@@ -1,13 +1,18 @@
 ﻿@using LastMinuteWebApp.Models
 @model IEnumerable<Offert>
 
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />  
-
 @{
     ViewBag.Title = "My Offerts";
 }
 
 <h2>My Offerts</h2>
+
+<div style="color: green; font-size: 16px">
+    @if (TempData["message"] != null)
+    {
+        @TempData["message"]
+    }
+</div>
 
 <table class="table">
     <tr>

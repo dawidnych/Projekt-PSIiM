@@ -1,0 +1,62 @@
+﻿@model LastMinuteWebApp.Models.Offert
+
+@{
+    ViewBag.Title = "Add Offert";
+}
+
+<h2>Add Offert</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+
+        @using (Html.BeginForm("AddOffert", "ClientBusiness", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+
+            <div class="form-group">
+                @Html.LabelFor(o => o.title, "Title", new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(o => o.title, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(o => o.title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(o => o.description, "Description", new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+                    @Html.TextAreaFor(o => o.description, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(o => o.description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(o => o.price, "Price", new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(o => o.price, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(o => o.price, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(o => o.quantity, "Quantity", new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(o => o.quantity, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(o => o.quantity, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(o => o.deadlineTime, "Deadline time", new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(o => o.deadlineTime, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(o => o.deadlineTime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-8">
+                    <input type="submit" value="Add" class="btn btn-default" />
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>
+
