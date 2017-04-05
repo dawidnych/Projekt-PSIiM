@@ -21,7 +21,7 @@ namespace LastMinuteWebApp.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, CustomRole, int, CustomUserLogin, CustomUserRole, CustomUserClaim>
     {
         public ApplicationDbContext()
-            : base("name=GrouponDBEntities2")
+            : base("name=GrouponDB")
         {
         }
 
