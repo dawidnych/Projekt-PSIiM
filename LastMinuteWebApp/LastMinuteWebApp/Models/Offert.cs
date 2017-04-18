@@ -26,11 +26,11 @@ namespace LastMinuteWebApp.Models
         public string title { get; set; }
 
         [Required(ErrorMessage = "This field is required")]
-        [Range(1, int.MaxValue, ErrorMessage = "Please enter a valid number")]
+        [Range(1, long.MaxValue, ErrorMessage = "Please enter a valid number")]
         public long price { get; set; }
 
         [Required(ErrorMessage = "This field is required")]
-        [Range(1, int.MaxValue, ErrorMessage = "Please enter a valid number")]
+        [Range(1, long.MaxValue, ErrorMessage = "Please enter a valid number")]
         public long quantity { get; set; }
 
         [Required(ErrorMessage = "This field is required")]

@@ -1,5 +1,5 @@
 ﻿@using LastMinuteWebApp.Models
-@model IEnumerable<Offert>
+@model SearchViewModel
 
 @{
     ViewBag.Title = "My Offerts";
@@ -14,24 +14,52 @@
     }
 </div>
 
-<table class="table">
-    <tr>
-        <th>Title</th>
-        <th>Descritpion</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Deadline time</th>
-    </tr>
-
-    @foreach(var item in Model)
+<div>
+    @using (Html.BeginForm("Search", "ClientBusiness", FormMethod.Get, new { @class = "form-inline", role = "form" }))
     {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.title)</td>
-            <td>@Html.DisplayFor(modelItem => item.description)</td>
-            <td>@Html.DisplayFor(modelItem => item.price)</td>
-            <td>@Html.DisplayFor(modelItem => item.quantity)</td>
-            <td>@Html.DisplayFor(modelItem => item.deadlineTime)</td>
-        </tr>
+        <div class="form-group">
+            @Html.LabelFor(m => m.SearchTerm, "Phrase")
+            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", autocomplete = "off"})
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.SearchCategory, "Filter by")
+            @Html.DropDownListFor(m => m.SearchCategory,
+           Model.SearchCategoryList.Select(x => new SelectListItem { Text = x.Text, Value = x.Value }),
+           new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <div style="margin-top: 25px">
+                <input type="submit" value="Search" class="btn btn-default" />
+            </div>
+        </div>
     }
-</table>
+</div>
+<br />
 
+@if (Model.SearchResults.Any())
+{
+    <table class="table">
+        <tr>
+            <th>Title</th>
+            <th>Descritpion</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Deadline time</th>
+        </tr>
+
+        @foreach (var offert in Model.SearchResults)
+        {
+            <tr>
+                <td>@offert.title</td>
+                <td>@offert.description</td>
+                <td>@offert.price</td>
+                <td>@offert.quantity</td>
+                <td>@offert.deadlineTime</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <text><br />No records found...<br /></text>
+}
