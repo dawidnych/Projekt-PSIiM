@@ -19,17 +19,17 @@ namespace LastMinuteWebApp.Controllers
 
         public ActionResult MyOfferts(string searchTerm, string searchCategory)
         {
-            LuceneSearch.AddUpdateLuceneIndex(OffertRepository.GetAll());
+            SearchOffert.AddUpdateLuceneIndex(OffertRepository.GetAll());
 
-            if (!Directory.Exists(LuceneSearch._luceneDir))
-                Directory.CreateDirectory(LuceneSearch._luceneDir);
+            if (!Directory.Exists(SearchOffert._luceneDir))
+                Directory.CreateDirectory(SearchOffert._luceneDir);
 
             List<Offert> _searchResults = (string.IsNullOrEmpty(searchCategory)
-                           ? LuceneSearch.Search(searchTerm)
-                           : LuceneSearch.Search(searchTerm, searchCategory)).ToList();
+                           ? SearchOffert.Search(true, searchTerm)
+                           : SearchOffert.Search(true, searchTerm, searchCategory)).ToList();
 
             if (string.IsNullOrEmpty(searchTerm) && !_searchResults.Any())
-                _searchResults = LuceneSearch.GetAllIndexRecords().ToList();
+                _searchResults = SearchOffert.GetAllIndexRecords().ToList();
 
             _searchResults = (from o in _searchResults select o)
                 .Where(o => o.idClientBusiness == constIdClientBusiness).ToList();
@@ -43,7 +43,7 @@ namespace LastMinuteWebApp.Controllers
                 new SearchCategoryItem {Text = "Deadline Time", Value = "deadlineTime" }
             };
 
-            return View(new SearchViewModel
+            return View(new SearchOffertViewModel
             {
                 SearchResults = _searchResults,
                 SearchCategoryList = _searchCategoryList

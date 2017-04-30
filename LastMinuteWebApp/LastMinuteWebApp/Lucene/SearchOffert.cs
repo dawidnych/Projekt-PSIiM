@@ -14,7 +14,7 @@ using LastMinuteWebApp.Models;
 
 namespace LastMinuteWebApp.Lucene
 {
-    public class LuceneSearch
+    public class SearchOffert
     {
         public static string _luceneDir = Path.Combine(HttpContext.Current.Request.PhysicalApplicationPath, "lucene_index");
         private static FSDirectory _directoryTemp;
@@ -149,7 +149,7 @@ namespace LastMinuteWebApp.Lucene
             return query;
         }
 
-        private static IEnumerable<Offert> _search (string searchQuery, string searchField = "")
+        private static IEnumerable<Offert> _searchOffert (string searchQuery, string searchField = "")
         {
             if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", "")))
                 return new List<Offert>();
@@ -187,7 +187,44 @@ namespace LastMinuteWebApp.Lucene
             }
         }
 
-        public static IEnumerable<Offert> Search(string input, string fieldName = "")
+        private static IEnumerable<Offert> _searchReservation(string searchQuery, string searchField = "")
+        {
+            if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", "")))
+                return new List<Offert>();
+
+            using (var searcher = new IndexSearcher(_directory, false))
+            {
+                var hits_limit = 1000;
+                var analyzer = new StandardAnalyzer(Version.LUCENE_30);
+
+                // search by single field
+                if (!string.IsNullOrEmpty(searchField))
+                {
+                    var parser = new QueryParser(Version.LUCENE_30, searchField, analyzer);
+                    var query = parseQuery(searchQuery, parser);
+                    var hits = searcher.Search(query, hits_limit).ScoreDocs;
+                    var results = _mapLuceneToDataList(hits, searcher);
+                    analyzer.Close();
+                    searcher.Dispose();
+                    return results;
+                }
+                // search by multiple fields (ordered by RELEVANCE)
+                else
+                {
+                    var parser = new MultiFieldQueryParser
+                        (Version.LUCENE_30, new[] { "description", "title", "price" }, analyzer);
+                    var query = parseQuery(searchQuery, parser);
+                    var hits = searcher.Search
+                    (query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;
+                    var results = _mapLuceneToDataList(hits, searcher);
+                    analyzer.Close();
+                    searcher.Dispose();
+                    return results;
+                }
+            }
+        }
+
+        public static IEnumerable<Offert> Search(bool searchOffert, string input, string fieldName = "")
         {
             if (string.IsNullOrEmpty(input))
                 return new List<Offert>();
@@ -196,7 +233,10 @@ namespace LastMinuteWebApp.Lucene
                 .Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim() + "*");
             input = string.Join(" ", terms);
 
-            return _search(input, fieldName);
+            if (searchOffert)
+                return _searchOffert(input, fieldName);
+            else
+                return _searchReservation(input, fieldName);
         }
 
         public static IEnumerable<Offert> GetAllIndexRecords()

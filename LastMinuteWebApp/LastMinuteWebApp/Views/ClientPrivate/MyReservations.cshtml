@@ -1,25 +1,18 @@
 ﻿@using LastMinuteWebApp.Models
-@model SearchOffertViewModel
+@model SearchReservationViewModel
 
 @{
-    ViewBag.Title = "My Offerts";
+    ViewBag.Title = "My Reservations";
 }
 
-<h2>My Offerts</h2>
-
-<div style="color: green; font-size: 16px">
-    @if (TempData["message"] != null)
-    {
-        @TempData["message"]
-    }
-</div>
+<h2>My Reservations</h2>
 
 <div>
-    @using (Html.BeginForm("Search", "ClientBusiness", FormMethod.Get, new { @class = "form-inline", role = "form" }))
+    @using (Html.BeginForm("SearchReservations", "ClientPrivate", FormMethod.Get, new { @class = "form-inline", role = "form" }))
     {
         <div class="form-group">
             @Html.LabelFor(m => m.SearchTerm, "Phrase")
-            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", autocomplete = "off"})
+            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", autocomplete = "off" })
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.SearchCategory, "Filter by")
@@ -36,25 +29,23 @@
 </div>
 <br />
 
-@if (Model.SearchResults.Any())
+@if (Model.Reservations.Any())
 {
     <table class="table">
         <tr>
             <th>Title</th>
             <th>Descritpion</th>
             <th>Price</th>
-            <th>Quantity</th>
-            <th>Deadline time</th>
+            <th>Code</th>
         </tr>
 
-        @foreach (var offert in Model.SearchResults)
+        @foreach (var reservation in Model.Reservations)
         {
             <tr>
-                <td>@offert.title</td>
-                <td>@offert.description</td>
-                <td>@offert.price zł</td>
-                <td>@offert.quantity</td>
-                <td>@offert.deadlineTime</td>
+                <td>@reservation.OffertData.title</td>
+                <td>@reservation.OffertData.description</td>
+                <td>@reservation.OffertData.price zł</td>
+                <td>@reservation.ReservationData.Code</td>
             </tr>
         }
     </table>

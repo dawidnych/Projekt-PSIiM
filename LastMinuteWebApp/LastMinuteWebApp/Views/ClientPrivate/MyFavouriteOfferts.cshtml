@@ -1,25 +1,17 @@
 ﻿@using LastMinuteWebApp.Models
-@model SearchOffertViewModel
-
+@model SearchFavouriteOffertViewModel
 @{
-    ViewBag.Title = "My Offerts";
+    ViewBag.Title = "My Favourite Offerts";
 }
 
-<h2>My Offerts</h2>
-
-<div style="color: green; font-size: 16px">
-    @if (TempData["message"] != null)
-    {
-        @TempData["message"]
-    }
-</div>
+<h2>My Favourite Offerts</h2>
 
 <div>
-    @using (Html.BeginForm("Search", "ClientBusiness", FormMethod.Get, new { @class = "form-inline", role = "form" }))
+    @using (Html.BeginForm("SearchOfferts", "ClientPrivate", FormMethod.Get, new { @class = "form-inline", role = "form" }))
     {
         <div class="form-group">
             @Html.LabelFor(m => m.SearchTerm, "Phrase")
-            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", autocomplete = "off"})
+            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", autocomplete = "off" })
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.SearchCategory, "Filter by")
@@ -36,7 +28,7 @@
 </div>
 <br />
 
-@if (Model.SearchResults.Any())
+@if (Model.Favourites.Any())
 {
     <table class="table">
         <tr>
@@ -47,14 +39,14 @@
             <th>Deadline time</th>
         </tr>
 
-        @foreach (var offert in Model.SearchResults)
+        @foreach (var favourite in Model.Favourites)
         {
             <tr>
-                <td>@offert.title</td>
-                <td>@offert.description</td>
-                <td>@offert.price zł</td>
-                <td>@offert.quantity</td>
-                <td>@offert.deadlineTime</td>
+                <td>@favourite.OffertData.title</td>
+                <td>@favourite.OffertData.description</td>
+                <td>@favourite.OffertData.price zł</td>
+                <td>@favourite.OffertData.quantity</td>
+                <td>@favourite.OffertData.deadlineTime</td>
             </tr>
         }
     </table>

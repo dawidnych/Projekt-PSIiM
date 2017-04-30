@@ -223,12 +223,13 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClientBusinessController.cs" />
+    <Compile Include="Controllers\ClientPrivateController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Lucene\LuceneSearch.cs" />
+    <Compile Include="Lucene\SearchOffert.cs" />
     <Compile Include="Lucene\SearchCategoryItem.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ClientBusiness.cs">
@@ -243,6 +244,7 @@
     <Compile Include="Models\FavouriteOffert.cs">
       <DependentUpon>GrouponDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FavouriteOffertJoinOffert.cs" />
     <Compile Include="Models\GrouponDBModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -266,7 +268,10 @@
     <Compile Include="Models\Reservation.cs">
       <DependentUpon>GrouponDBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Models\ReservationJoinOffert.cs" />
+    <Compile Include="Models\SearchFavouriteOffertViewModel.cs" />
+    <Compile Include="Models\SearchOffertViewModel.cs" />
+    <Compile Include="Models\SearchReservationViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\OffertRepository.cs" />
     <Compile Include="Startup.cs" />
@@ -349,6 +354,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\ClientBusiness\MyOfferts.cshtml" />
     <Content Include="Views\ClientBusiness\AddOffert.cshtml" />
+    <Content Include="Views\ClientPrivate\MyReservations.cshtml" />
+    <Content Include="Views\ClientPrivate\MyFavouriteOfferts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

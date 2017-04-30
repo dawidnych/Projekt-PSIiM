@@ -6,9 +6,9 @@ using System.Web;
 
 namespace LastMinuteWebApp.Models
 {
-    public class SearchViewModel
+    public class SearchReservationViewModel
     {
-        public IEnumerable<Offert> SearchResults { get; set; }
+        public IEnumerable<ReservationJoinOffert> Reservations { get; set; }
         public IList<SearchCategoryItem> SearchCategoryList { get; set; }
         public string SearchTerm { get; set; }
         public string SearchCategory { get; set; }
