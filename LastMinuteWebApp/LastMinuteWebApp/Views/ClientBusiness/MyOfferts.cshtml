@@ -13,6 +13,12 @@
         @TempData["message"]
     }
 </div>
+<div style="color: red; font-size: 16px">
+    @if (TempData["error"] != null)
+    {
+        @TempData["error"]
+    }
+</div>
 
 <div>
     @using (Html.BeginForm("Search", "ClientBusiness", FormMethod.Get, new { @class = "form-inline", role = "form" }))
@@ -45,6 +51,7 @@
             <th>Price</th>
             <th>Quantity</th>
             <th>Deadline time</th>
+            <th>Action</th>
         </tr>
 
         @foreach (var offert in Model.SearchResults)
@@ -54,7 +61,24 @@
                 <td>@offert.description</td>
                 <td>@offert.price zł</td>
                 <td>@offert.quantity</td>
-                <td>@offert.deadlineTime</td>
+                @if (DateTime.Compare(offert.deadlineTime, DateTime.Now) > 0)
+                {
+                    <td>@offert.deadlineTime</td>
+                    <td>
+                        @using (Html.BeginForm("DeleteOffert", "ClientBusiness"))
+                        {
+                            @Html.Hidden("OffertId", offert.id)
+                            <input type="submit" value="Delete" class="btn btn-default" />
+                        }
+                    </td>
+                }
+                else
+                {
+                    <td style="color: red">@offert.deadlineTime</td>
+                    <td>
+                        <button type="button" class="btn btn-default disabled">Delete</button>
+                    </td>
+                }
             </tr>
         }
     </table>

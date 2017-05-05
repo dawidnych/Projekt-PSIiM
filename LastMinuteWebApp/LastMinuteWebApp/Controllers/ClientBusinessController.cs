@@ -15,7 +15,9 @@ namespace LastMinuteWebApp.Controllers
         // ToDo: currently logged in business client id
         int constIdClientBusiness = 88;
 
-        GrouponDBEntities2 DBOffert = new GrouponDBEntities2();
+        GrouponDBEntities2 DBConnect = new GrouponDBEntities2();
+
+
 
         public ActionResult MyOfferts(string searchTerm, string searchCategory)
         {
@@ -31,8 +33,9 @@ namespace LastMinuteWebApp.Controllers
             if (string.IsNullOrEmpty(searchTerm) && !_searchResults.Any())
                 _searchResults = SearchOffert.GetAllIndexRecords().ToList();
 
-            _searchResults = (from o in _searchResults select o)
-                .Where(o => o.idClientBusiness == constIdClientBusiness).ToList();
+            _searchResults = (from o in _searchResults
+                              where o.idClientBusiness == constIdClientBusiness
+                              select o).ToList();
 
             var _searchCategoryList = new List<SearchCategoryItem> {
                 new SearchCategoryItem {Text = "(All Fields)", Value = ""},
@@ -55,10 +58,51 @@ namespace LastMinuteWebApp.Controllers
             return RedirectToAction("MyOfferts", new { searchTerm, searchCategory });
         }
 
-        [HttpGet]
+        [HttpPost]
+        public ActionResult DeleteOffert(int offertId)
+        {
+            Offert offert = DBConnect.Offert.Find(offertId);
+            if (offert != null)
+            {
+                if (DateTime.Compare(offert.deadlineTime, DateTime.Now) > 0)
+                {
+                    var reservations = (from r in DBConnect.Reservation
+                                       where r.idOffert == offert.id
+                                       select r).ToList();
+                    foreach(var reservation in reservations)
+                    {
+                        DBConnect.Reservation.Remove(reservation);
+                    }
+
+                    var favourites = (from f in DBConnect.FavouriteOffert
+                                      where f.idOffert == offert.id
+                                      select f).ToList();
+                    foreach(var favourite in favourites)
+                    {
+                        DBConnect.FavouriteOffert.Remove(favourite);
+                    }
+
+                    DBConnect.Offert.Remove(offert);
+                    SearchOffert.ClearLuceneIndexRecord(offertId);
+
+                    DBConnect.SaveChanges();
+
+                    TempData["message"] = "Offert deleted";
+                }
+                else
+                {
+                    TempData["error"] = "You can't delete this offert because time is up";
+                }
+            }
+
+            return RedirectToAction("MyOfferts");
+        }
+
+
+
         public ActionResult AddOffert()
         {
-            return View();
+            return View(new Offert());
         }
 
         [HttpPost]
@@ -67,11 +111,11 @@ namespace LastMinuteWebApp.Controllers
             if (ModelState.IsValid)
             {
                 offert.idClientBusiness = constIdClientBusiness;
-                //DBOffert.Offert.Add(offert);
-                //DBOffert.SaveChanges();
-                //  LuceneSearch.AddUpdateLuceneIndex(offert);
+                DBConnect.Offert.Add(offert);
+                DBConnect.SaveChanges();
+                SearchOffert.AddUpdateLuceneIndex(offert);
 
-                TempData["message"] = string.Format("Dodano {0}", offert.title);
+                TempData["message"] = string.Format("{0} added", offert.title);
 
                 return RedirectToAction("MyOfferts");
             }

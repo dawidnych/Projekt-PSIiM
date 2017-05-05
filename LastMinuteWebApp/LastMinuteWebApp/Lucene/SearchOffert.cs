@@ -149,7 +149,7 @@ namespace LastMinuteWebApp.Lucene
             return query;
         }
 
-        private static IEnumerable<Offert> _searchOffert (string searchQuery, string searchField = "")
+        private static IEnumerable<Offert> _searchOffert(string searchQuery, string searchField = "")
         {
             if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", "")))
                 return new List<Offert>();
@@ -212,7 +212,7 @@ namespace LastMinuteWebApp.Lucene
                 else
                 {
                     var parser = new MultiFieldQueryParser
-                        (Version.LUCENE_30, new[] { "description", "title", "price" }, analyzer);
+                        (Version.LUCENE_30, new[] { "description", "title", "price", "deadlineTime" }, analyzer);
                     var query = parseQuery(searchQuery, parser);
                     var hits = searcher.Search
                     (query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;

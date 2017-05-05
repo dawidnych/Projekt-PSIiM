@@ -1,11 +1,23 @@
 ﻿@using LastMinuteWebApp.Models
 @model SearchReservationViewModel
-
 @{
     ViewBag.Title = "My Reservations";
 }
 
 <h2>My Reservations</h2>
+
+<div style="color: green; font-size: 16px">
+    @if (TempData["message"] != null)
+    {
+        @TempData["message"]
+    }
+</div>
+<div style="color: red; font-size: 16px">
+    @if (TempData["error"] != null)
+    {
+        @TempData["error"]
+    }
+</div>
 
 <div>
     @using (Html.BeginForm("SearchReservations", "ClientPrivate", FormMethod.Get, new { @class = "form-inline", role = "form" }))
@@ -37,6 +49,8 @@
             <th>Descritpion</th>
             <th>Price</th>
             <th>Code</th>
+            <th>Deadline time</th>
+            <th>Action</th>
         </tr>
 
         @foreach (var reservation in Model.Reservations)
@@ -46,6 +60,24 @@
                 <td>@reservation.OffertData.description</td>
                 <td>@reservation.OffertData.price zł</td>
                 <td>@reservation.ReservationData.Code</td>
+                @if (DateTime.Compare(reservation.OffertData.deadlineTime, DateTime.Now) > 0)
+                {
+                    <td>@reservation.OffertData.deadlineTime</td>
+                    <td>
+                        @using (Html.BeginForm("DeleteReservation", "ClientPrivate"))
+                        {
+                            @Html.Hidden("ReservationId", reservation.ReservationData.id)
+                            <input type="submit" value="Cancel" class="btn btn-default"/>
+                        }
+                    </td>
+                }
+                else
+                {
+                    <td style="color: red">@reservation.OffertData.deadlineTime</td>
+                    <td>
+                        <button type="button" class="btn btn-default disabled">Cancel</button>
+                    </td>
+                }
             </tr>
         }
     </table>
