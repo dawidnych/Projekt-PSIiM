@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -7,8 +8,10 @@ using Microsoft.AspNet.Identity.EntityFramework;
 namespace LastMinuteWebApp.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
+
     public class ApplicationUser : IdentityUser<int, UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
     {
+        public Nullable<long> idClientBusiness { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, int> manager)
         {
@@ -16,6 +19,8 @@ namespace LastMinuteWebApp.Models
             return userIdentity;
         }
     }
+
+    
 
     public class UserLoginIntPk : IdentityUserLogin<int>
     { }
@@ -73,14 +78,17 @@ namespace LastMinuteWebApp.Models
                .HasMaxLength(128)
                .IsRequired();
             modelBuilder.Entity<ApplicationUser>()
-               .ToTable("Custom_AspNetUsers")
+               .ToTable("ClientPrivate")
                .Property(c => c.UserName)
                .HasMaxLength(128)
                .IsRequired();
-            modelBuilder.Entity<UserLoginIntPk>().ToTable("Users");
+            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.Id).HasColumnName("id");
+            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.Email).HasColumnName("email");
+            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.PasswordHash).HasColumnName("haslo");
+            modelBuilder.Entity<UserLoginIntPk>().ToTable("UsersLog");
             modelBuilder.Entity<RoleIntPk>().ToTable("Roles");
             modelBuilder.Entity<UserRoleIntPk>().ToTable("UserRoles");
-        }
+    }
     }
 
 

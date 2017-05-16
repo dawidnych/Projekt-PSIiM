@@ -456,14 +456,14 @@ namespace LastMinuteWebApp.Controllers
         {
             public string LoginProvider { get; set; }
             public string RedirectUri { get; set; }
-            public int UserId { get; set; }
+            public string UserId { get; set; }
 
             public ChallengeResult(string provider, string redirectUri)
-                : this(provider, redirectUri, 0)
+                : this(provider, redirectUri, null)
             {
             }
 
-            public ChallengeResult(string provider, string redirectUri, int userId)
+            public ChallengeResult(string provider, string redirectUri, string userId)
             {
                 LoginProvider = provider;
                 RedirectUri = redirectUri;

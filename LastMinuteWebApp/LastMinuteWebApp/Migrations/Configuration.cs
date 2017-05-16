@@ -9,7 +9,7 @@ namespace LastMinuteWebApp.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(LastMinuteWebApp.Models.ApplicationDbContext context)

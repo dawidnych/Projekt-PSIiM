@@ -14,6 +14,21 @@ using LastMinuteWebApp.Models;
 
 namespace LastMinuteWebApp
 {
+    public class CustomPassword : IPasswordHasher
+    {
+        public string HashPassword(string password)
+        {
+            return password;
+        }
+
+        public PasswordVerificationResult VerifyHashedPassword(string hashedPassword, string providedPassword)
+        {
+            if (hashedPassword.Equals(providedPassword))
+                return PasswordVerificationResult.Success;
+            else return PasswordVerificationResult.Failed;
+        }
+    }
+
     public class EmailService : IIdentityMessageService
     {
         public Task SendAsync(IdentityMessage message)
@@ -38,6 +53,7 @@ namespace LastMinuteWebApp
         public ApplicationUserManager(IUserStore<ApplicationUser, int> store)
             : base(store)
         {
+            PasswordHasher = new CustomPassword();
         }
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
