@@ -27,6 +27,7 @@ namespace LastMinuteWebApp.Models
 
         [Required(ErrorMessage = "This field is required")]
         [Range(1, int.MaxValue, ErrorMessage = "Please enter a valid number")]
+        [DataType(DataType.Currency, ErrorMessage = "Test")]
         public long price { get; set; }
 
         [Required(ErrorMessage = "This field is required")]

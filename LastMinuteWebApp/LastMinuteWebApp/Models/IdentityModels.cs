@@ -7,82 +7,81 @@ using Microsoft.AspNet.Identity.EntityFramework;
 namespace LastMinuteWebApp.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
-    public class ApplicationUser : IdentityUser<int, CustomUserLogin, CustomUserRole, CustomUserClaim>
+    public class ApplicationUser : IdentityUser<int, UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
     {
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, int> manager)
         {
-            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
-            // Add custom user claims here
             return userIdentity;
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, CustomRole, int, CustomUserLogin, CustomUserRole, CustomUserClaim>
+    public class UserLoginIntPk : IdentityUserLogin<int>
+    { }
+
+    public class UserRoleIntPk : IdentityUserRole<int>
+    { }
+
+    public class UserClaimIntPk : IdentityUserClaim<int>
+    { }
+
+    public class RoleIntPk : IdentityRole<int, UserRoleIntPk>
+    {
+        public RoleIntPk() { }
+        public RoleIntPk(string name) { Name = name; }
+    }
+
+    public class UserStoreIntPk : UserStore<ApplicationUser, RoleIntPk, int,
+    UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
+    {
+        public UserStoreIntPk(ApplicationDbContext context)
+          : base(context)
+        {
+        }
+    }
+
+    public class RoleStoreIntPk : RoleStore<RoleIntPk, int, UserRoleIntPk>
+    {
+        public RoleStoreIntPk(ApplicationDbContext context)
+           : base(context)
+        {
+        }
+    }
+
+
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, RoleIntPk, int, UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
     {
         public ApplicationDbContext()
-            : base("name=GrouponDBEntities2")
+           : base("MyContext")
         {
         }
 
         public static ApplicationDbContext Create()
         {
-            return new ApplicationDbContext();
+            var context = new ApplicationDbContext();
+            context.Database.CreateIfNotExists();
+            return context;
         }
 
-        protected override void OnModelCreating(System.Data.Entity.DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<IdentityUser>().ToTable("ClientPrivate");
-            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate");
-            modelBuilder.Entity<IdentityUser>().ToTable("ClientPrivate").Property(p => p.Id).HasColumnName("id");
-            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.Id).HasColumnName("id");
-            modelBuilder.Entity<IdentityUser>().ToTable("ClientPrivate").Property(p => p.Email).HasColumnName("email");
-            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.Email).HasColumnName("email");
-            modelBuilder.Entity<IdentityUser>().ToTable("ClientPrivate").Property(p => p.PasswordHash).HasColumnName("haslo");
-            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.PasswordHash).HasColumnName("haslo");
-
-
-            modelBuilder.Entity<CustomUserRole>().ToTable("MyUserRoles");
-            modelBuilder.Entity<CustomUserLogin>().ToTable("MyUserLogins");
-            modelBuilder.Entity<CustomUserClaim>().ToTable("MyUserClaims");
-            modelBuilder.Entity<CustomRole>().ToTable("MyRoles");
-
-            modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(l => l.UserId);
-            modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
-            modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
-            /*modelBuilder.Entity<IdentityUserRole>().ToTable("MyUserRoles");
-            modelBuilder.Entity<IdentityUserLogin>().ToTable("MyUserLogins");
-            modelBuilder.Entity<IdentityUserClaim>().ToTable("MyUserClaims");
-            modelBuilder.Entity<IdentityRole>().ToTable("MyRoles");*/
+            modelBuilder.Entity<RoleIntPk>()
+               .Property(c => c.Name)
+               .HasMaxLength(128)
+               .IsRequired();
+            modelBuilder.Entity<ApplicationUser>()
+               .ToTable("Custom_AspNetUsers")
+               .Property(c => c.UserName)
+               .HasMaxLength(128)
+               .IsRequired();
+            modelBuilder.Entity<UserLoginIntPk>().ToTable("Users");
+            modelBuilder.Entity<RoleIntPk>().ToTable("Roles");
+            modelBuilder.Entity<UserRoleIntPk>().ToTable("UserRoles");
         }
     }
 
-    public class CustomUserRole : IdentityUserRole<int> { }
-    public class CustomUserClaim : IdentityUserClaim<int> { }
-    public class CustomUserLogin : IdentityUserLogin<int> { }
 
-    public class CustomRole : IdentityRole<int, CustomUserRole>
-    {
-        public CustomRole() { }
-        public CustomRole(string name) { Name = name; }
-    }
-
-    public class CustomUserStore : UserStore<ApplicationUser, CustomRole, int,
-        CustomUserLogin, CustomUserRole, CustomUserClaim>
-    {
-        public CustomUserStore(ApplicationDbContext context)
-            : base(context)
-        {
-        }
-    }
-
-    public class CustomRoleStore : RoleStore<CustomRole, int, CustomUserRole>
-    {
-        public CustomRoleStore(ApplicationDbContext context)
-            : base(context)
-        {
-        }
-    }
 }

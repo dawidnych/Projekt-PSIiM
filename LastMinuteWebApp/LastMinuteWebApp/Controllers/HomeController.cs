@@ -59,6 +59,7 @@ namespace LastMinuteWebApp.Controllers
             int pageSize = 8;
             int pageNumber = (page ?? 1);
             return View(offerts.ToPagedList(pageNumber, pageSize));
+
         }
 
         public ActionResult About()

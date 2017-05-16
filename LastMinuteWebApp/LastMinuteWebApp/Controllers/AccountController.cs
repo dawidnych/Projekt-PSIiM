@@ -454,21 +454,21 @@ namespace LastMinuteWebApp.Controllers
 
         internal class ChallengeResult : HttpUnauthorizedResult
         {
+            public string LoginProvider { get; set; }
+            public string RedirectUri { get; set; }
+            public int UserId { get; set; }
+
             public ChallengeResult(string provider, string redirectUri)
-                : this(provider, redirectUri, null)
+                : this(provider, redirectUri, 0)
             {
             }
 
-            public ChallengeResult(string provider, string redirectUri, string userId)
+            public ChallengeResult(string provider, string redirectUri, int userId)
             {
                 LoginProvider = provider;
                 RedirectUri = redirectUri;
                 UserId = userId;
             }
-
-            public string LoginProvider { get; set; }
-            public string RedirectUri { get; set; }
-            public string UserId { get; set; }
 
             public override void ExecuteResult(ControllerContext context)
             {
