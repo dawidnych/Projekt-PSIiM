@@ -1,11 +1,10 @@
 ﻿@using LastMinuteWebApp.Models
-@model SearchOffertViewModel
-
+@model SearchReservationViewModel
 @{
-    ViewBag.Title = "My Offerts";
+    ViewBag.Title = "My Reservations";
 }
 
-<h2>My Offerts</h2>
+<h2>My Reservations</h2>
 
 <div style="color: green; font-size: 16px">
     @if (TempData["message"] != null)
@@ -21,11 +20,11 @@
 </div>
 
 <div>
-    @using (Html.BeginForm("Search", "ClientBusiness", FormMethod.Get, new { @class = "form-inline", role = "form" }))
+    @using (Html.BeginForm("SearchReservations", "ClientPrivate", FormMethod.Get, new { @class = "form-inline", role = "form" }))
     {
         <div class="form-group">
             @Html.LabelFor(m => m.SearchTerm, "Phrase")
-            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", autocomplete = "off"})
+            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", autocomplete = "off" })
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.SearchCategory, "Filter by")
@@ -42,41 +41,41 @@
 </div>
 <br />
 
-@if (Model.SearchResults.Any())
+@if (Model.Reservations.Any())
 {
     <table class="table">
         <tr>
             <th>Title</th>
             <th>Descritpion</th>
             <th>Price</th>
-            <th>Quantity</th>
+            <th>Code</th>
             <th>Deadline time</th>
             <th>Action</th>
         </tr>
 
-        @foreach (var offert in Model.SearchResults)
+        @foreach (var reservation in Model.Reservations)
         {
             <tr>
-                <td>@offert.title</td>
-                <td>@offert.description</td>
-                <td>@offert.price zł</td>
-                <td>@offert.quantity</td>
-                @if (DateTime.Compare(offert.deadlineTime, DateTime.Now) > 0)
+                <td>@reservation.OffertData.title</td>
+                <td>@reservation.OffertData.description</td>
+                <td>@reservation.OffertData.price zł</td>
+                <td>@reservation.ReservationData.Code</td>
+                @if (DateTime.Compare(reservation.OffertData.deadlineTime, DateTime.Now) > 0)
                 {
-                    <td>@offert.deadlineTime</td>
+                    <td>@reservation.OffertData.deadlineTime</td>
                     <td>
-                        @using (Html.BeginForm("DeleteOffert", "ClientBusiness"))
+                        @using (Html.BeginForm("DeleteReservation", "ClientPrivate"))
                         {
-                            @Html.Hidden("OffertId", offert.id)
-                            <input type="submit" value="Delete" class="btn btn-default" />
+                            @Html.Hidden("ReservationId", reservation.ReservationData.id)
+                            <input type="submit" value="Cancel" class="btn btn-default"/>
                         }
                     </td>
                 }
                 else
                 {
-                    <td style="color: red">@offert.deadlineTime</td>
+                    <td style="color: red">@reservation.OffertData.deadlineTime</td>
                     <td>
-                        <button type="button" class="btn btn-default disabled">Delete</button>
+                        <button type="button" class="btn btn-default disabled">Cancel</button>
                     </td>
                 }
             </tr>

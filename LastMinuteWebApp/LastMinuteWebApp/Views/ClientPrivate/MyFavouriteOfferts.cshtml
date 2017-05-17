@@ -1,0 +1,108 @@
+﻿@using LastMinuteWebApp.Models
+@model SearchFavouriteOffertViewModel
+@{
+    ViewBag.Title = "My Favourite Offerts";
+}
+
+<h2>My Favourite Offerts</h2>
+
+<div style="color: green; font-size: 16px">
+    @if (TempData["message"] != null)
+    {
+        @TempData["message"]
+    }
+</div>
+<div style="color: red; font-size: 16px">
+    @if (TempData["error"] != null)
+    {
+        @TempData["error"]
+    }
+</div>
+
+<div>
+    @using (Html.BeginForm("SearchOfferts", "ClientPrivate", FormMethod.Get, new { @class = "form-inline", role = "form" }))
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.SearchTerm, "Phrase")
+            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", autocomplete = "off" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.SearchCategory, "Filter by")
+            @Html.DropDownListFor(m => m.SearchCategory,
+           Model.SearchCategoryList.Select(x => new SelectListItem { Text = x.Text, Value = x.Value }),
+           new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <div style="margin-top: 25px">
+                <input type="submit" value="Search" class="btn btn-default" />
+            </div>
+        </div>
+    }
+</div>
+<br />
+
+@if (Model.Favourites.Any())
+{
+    <table class="table">
+        <tr>
+            <th>Title</th>
+            <th>Descritpion</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Deadline time</th>
+            <th>Action</th>
+        </tr>
+
+        @foreach (var favourite in Model.Favourites)
+        {
+            <tr>
+                <td>@favourite.OffertData.title</td>
+                <td>@favourite.OffertData.description</td>
+                <td>@favourite.OffertData.price zł</td>
+                
+                @if (favourite.OffertData.quantity > 0)
+                {
+                    <td>@favourite.OffertData.quantity</td>
+                }
+                else
+                {
+                    <td style="color: red">@favourite.OffertData.quantity</td>
+                }
+
+                @if (DateTime.Compare(favourite.OffertData.deadlineTime, DateTime.Now) > 0)
+                {
+                    <td>@favourite.OffertData.deadlineTime</td>
+                }
+                else
+                {
+                    <td style="color: red">@favourite.OffertData.deadlineTime</td>
+                }
+
+                <td>
+                    @if (favourite.OffertData.quantity > 0 && DateTime.Compare(favourite.OffertData.deadlineTime, DateTime.Now) > 0)
+                    {
+                        using (Html.BeginForm("ReserveOffert", "ClientPrivate"))
+                        {
+                            @Html.Hidden("FavouriteOffertId", favourite.FavouriteOffertData.id)
+                            <input type="submit" value="Reserve" class="btn btn-default btn-block" />
+                        }
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-default disabled btn-block">Reserve</button>
+                    }
+
+                    @using (Html.BeginForm("DeleteOffert", "ClientPrivate"))
+                    {
+                        @Html.Hidden("FavouriteOffertId", favourite.FavouriteOffertData.id)
+                        <input type="submit" value="Delete" class="btn btn-default btn-block" />
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <text><br />No records found...<br /></text>
+}
