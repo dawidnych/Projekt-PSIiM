@@ -85,9 +85,13 @@ namespace LastMinuteWebApp.Models
             modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.Id).HasColumnName("id");
             modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.Email).HasColumnName("email");
             modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.PasswordHash).HasColumnName("haslo");
-            modelBuilder.Entity<UserLoginIntPk>().ToTable("UsersLog");
-            modelBuilder.Entity<RoleIntPk>().ToTable("Roles");
-            modelBuilder.Entity<UserRoleIntPk>().ToTable("UserRoles");
+            modelBuilder.Entity<ApplicationUser>().ToTable("ClientPrivate").Property(p => p.idClientBusiness).HasColumnName("idClientBusiness");
+            modelBuilder.Entity<UserLoginIntPk>().ToTable("userslog");
+            modelBuilder.Entity<RoleIntPk>().ToTable("roles");
+            modelBuilder.Entity<UserRoleIntPk>().ToTable("userroles");
+            modelBuilder.Entity<UserClaimIntPk>().ToTable("aspnetuserclaims");
+
+            
     }
     }
 
