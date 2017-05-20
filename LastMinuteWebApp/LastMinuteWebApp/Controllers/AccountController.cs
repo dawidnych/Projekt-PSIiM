@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using LastMinuteWebApp.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace LastMinuteWebApp.Controllers
 {
@@ -58,6 +59,12 @@ namespace LastMinuteWebApp.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+          /*var userId = User.Identity.GetUserId<int>();
+            var user = UserManager.FindByIdAsync(userId);
+            if (user.Result.idClientBusiness == null)
+            {
+
+            }*/
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
