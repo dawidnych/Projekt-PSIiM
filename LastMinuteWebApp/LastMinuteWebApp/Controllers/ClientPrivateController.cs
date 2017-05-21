@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace LastMinuteWebApp.Controllers
 {
+    [Authorize]
     public class ClientPrivateController : Controller
     {
         // ToDo: currently logged in private client id
