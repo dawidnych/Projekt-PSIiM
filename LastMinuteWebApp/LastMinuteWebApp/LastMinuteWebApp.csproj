@@ -112,6 +112,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -226,6 +227,7 @@
     <Compile Include="Controllers\ClientPrivateController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -356,6 +358,7 @@
     <Content Include="Views\ClientBusiness\AddOffert.cshtml" />
     <Content Include="Views\ClientPrivate\MyReservations.cshtml" />
     <Content Include="Views\ClientPrivate\MyFavouriteOfferts.cshtml" />
+    <Content Include="Views\Account\AccessDenied.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -10,6 +10,8 @@ using System.Web.Mvc;
 
 namespace LastMinuteWebApp.Controllers
 {
+    [Authorize]
+    [ClientBusinessAuthorizeAttribute]
     public class ClientBusinessController : Controller
     {
         // ToDo: currently logged in business client id

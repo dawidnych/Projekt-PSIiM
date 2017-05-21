@@ -59,12 +59,13 @@ namespace LastMinuteWebApp.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-          /*var userId = User.Identity.GetUserId<int>();
-            var user = UserManager.FindByIdAsync(userId);
-            if (user.Result.idClientBusiness == null)
-            {
+            var userId = User.Identity.GetUserId<int>();
+            /*var userId = User.Identity.GetUserId<int>();
+              var user = UserManager.FindByIdAsync(userId);
+              if (user.Result.idClientBusiness == null)
+              {
 
-            }*/
+              }*/
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -407,6 +408,12 @@ namespace LastMinuteWebApp.Controllers
         // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult AccessDenied()
         {
             return View();
         }
