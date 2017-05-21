@@ -8,6 +8,7 @@ using PagedList;
 
 namespace LastMinuteWebApp.Controllers
 {
+    [ValidateInput(false)]
     public class HomeController : Controller
     {
         GrouponDBEntities2 DbOffert = new GrouponDBEntities2();

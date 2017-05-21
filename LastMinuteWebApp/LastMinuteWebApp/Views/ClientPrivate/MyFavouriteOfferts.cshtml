@@ -57,7 +57,8 @@
         {
             <tr>
                 <td>@favourite.OffertData.title</td>
-                <td>@favourite.OffertData.description</td>
+                
+                <td>@Html.Raw(favourite.OffertData.description)</td>
                 <td>@favourite.OffertData.price zł</td>
                 
                 @if (favourite.OffertData.quantity > 0)

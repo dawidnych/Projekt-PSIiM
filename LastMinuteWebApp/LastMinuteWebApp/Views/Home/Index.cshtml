@@ -53,7 +53,8 @@
                 @Html.DisplayFor(modelItem => item.title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.description)
+                @Html.Raw(item.description)
+                
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.price)
@@ -63,6 +64,7 @@
             </td>
             <td>
                 @Html.ValueFor(modelItem => item.deadlineTime, "{0:dd/MM/yyyy}")
+
             </td>
 
         </tr>

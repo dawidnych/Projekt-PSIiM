@@ -12,6 +12,7 @@ namespace LastMinuteWebApp.Controllers
 {
     [Authorize]
     [ClientBusinessAuthorizeAttribute]
+    [ValidateInput(false)]
     public class ClientBusinessController : Controller
     {
         // ToDo: currently logged in business client id

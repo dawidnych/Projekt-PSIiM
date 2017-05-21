@@ -15,6 +15,7 @@ using Microsoft.Ajax.Utilities;
 namespace LastMinuteWebApp.Controllers
 {
     [Authorize]
+    [ValidateInput(false)]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;

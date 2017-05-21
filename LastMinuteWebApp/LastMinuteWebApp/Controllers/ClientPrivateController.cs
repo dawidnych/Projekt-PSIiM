@@ -11,6 +11,7 @@ using System.Web.Mvc;
 namespace LastMinuteWebApp.Controllers
 {
     [Authorize]
+    [ValidateInput(false)]
     public class ClientPrivateController : Controller
     {
         // ToDo: currently logged in private client id
