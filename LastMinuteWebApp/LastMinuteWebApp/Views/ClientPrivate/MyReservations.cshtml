@@ -68,7 +68,7 @@
                         @using (Html.BeginForm("DeleteReservation", "ClientPrivate"))
                         {
                             @Html.Hidden("ReservationId", reservation.ReservationData.id)
-                            <input type="submit" value="Cancel" class="btn btn-default" style="width: 100%"/>
+                            <input type="submit" value="Cancel" class="btn btn-default" style="width: 100%" />
                         }
                     </td>
                 }
@@ -88,7 +88,7 @@ else
     <text><br />No records found...<br /></text>
 }
 
-<br/>
+<br />
 Page @(Model.Reservations.PageCount < Model.Reservations.PageNumber ? 0 : Model.Reservations.PageNumber) of @Model.Reservations.PageCount
 
 @Html.PagedListPager(Model.Reservations, page => Url.Action("MyReservations", "ClientPrivate",

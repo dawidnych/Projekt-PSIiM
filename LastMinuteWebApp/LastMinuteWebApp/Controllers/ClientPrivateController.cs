@@ -1,17 +1,19 @@
 ﻿using LastMinuteWebApp.Lucene;
 using LastMinuteWebApp.Models;
 using LastMinuteWebApp.Repositories;
+using Microsoft.AspNet.Identity;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using PagedList;
-using Microsoft.AspNet.Identity;
 
 namespace LastMinuteWebApp.Controllers
 {
+    [Authorize]
+    [ValidateInput(false)]
     public class ClientPrivateController : Controller
     {
 
@@ -181,8 +183,8 @@ namespace LastMinuteWebApp.Controllers
                         int clientPrivateId = User.Identity.GetUserId<Int32>();
 
                         Random random = new Random();
-                        string chars = "abcde1234567890";
-                        string randomString = new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray());
+                        string chars = "1234567890";
+                        string randomString = new string(Enumerable.Repeat(chars, 4).Select(s => s[random.Next(s.Length)]).ToArray());
 
                         Reservation reservation = new Reservation
                         {

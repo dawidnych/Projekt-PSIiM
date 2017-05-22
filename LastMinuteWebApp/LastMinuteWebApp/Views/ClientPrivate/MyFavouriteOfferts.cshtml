@@ -60,7 +60,7 @@
                 <td>@favourite.OffertData.title</td>
                 <td>@favourite.OffertData.description</td>
                 <td>@favourite.OffertData.price zł</td>
-                
+
                 @if (favourite.OffertData.quantity > 0)
                 {
                     <td>@favourite.OffertData.quantity</td>
@@ -86,7 +86,7 @@
                             using (Html.BeginForm("ReserveOffert", "ClientPrivate"))
                             {
                                 @Html.Hidden("FavouriteOffertId", favourite.FavouriteOffertData.id)
-                                <input type="submit" value="Reserve" class="btn btn-default" style="width: 100%"/>
+                                <input type="submit" value="Reserve" class="btn btn-default" style="width: 100%" />
                             }
                         }
                         else
@@ -97,7 +97,7 @@
                         @using (Html.BeginForm("DeleteOffert", "ClientPrivate"))
                         {
                             @Html.Hidden("FavouriteOffertId", favourite.FavouriteOffertData.id)
-                            <input type="submit" value="Remove" class="btn btn-default" style="width: 100%"/>
+                            <input type="submit" value="Remove" class="btn btn-default" style="width: 100%" />
                         }
                     </div>
                 </td>
@@ -110,7 +110,7 @@ else
     <text><br />No records found...<br /></text>
 }
 
-<br/>
+<br />
 Page @(Model.Favourites.PageCount < Model.Favourites.PageNumber ? 0 : Model.Favourites.PageNumber) of @Model.Favourites.PageCount
 
 @Html.PagedListPager(Model.Favourites, page => Url.Action("MyFavouriteOfferts", "ClientPrivate",

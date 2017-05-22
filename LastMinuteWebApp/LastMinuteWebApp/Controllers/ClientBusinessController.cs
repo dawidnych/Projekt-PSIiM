@@ -1,17 +1,20 @@
 ﻿using LastMinuteWebApp.Lucene;
 using LastMinuteWebApp.Models;
 using LastMinuteWebApp.Repositories;
+using Microsoft.AspNet.Identity;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using PagedList;
-using Microsoft.AspNet.Identity;
 
 namespace LastMinuteWebApp.Controllers
 {
+    [Authorize]
+    [ClientBusinessAuthorizeAttribute]
+    [ValidateInput(false)]
     public class ClientBusinessController : Controller
     {
 
@@ -76,9 +79,9 @@ namespace LastMinuteWebApp.Controllers
                 if (DateTime.Compare(offert.deadlineTime, DateTime.Now) > 0)
                 {
                     var reservations = (from r in DBConnect.Reservation
-                                       where r.idOffert == offert.id
-                                       select r).ToList();
-                    foreach(var reservation in reservations)
+                                        where r.idOffert == offert.id
+                                        select r).ToList();
+                    foreach (var reservation in reservations)
                     {
                         DBConnect.Reservation.Remove(reservation);
                     }
@@ -86,7 +89,7 @@ namespace LastMinuteWebApp.Controllers
                     var favourites = (from f in DBConnect.FavouriteOffert
                                       where f.idOffert == offert.id
                                       select f).ToList();
-                    foreach(var favourite in favourites)
+                    foreach (var favourite in favourites)
                     {
                         DBConnect.FavouriteOffert.Remove(favourite);
                     }

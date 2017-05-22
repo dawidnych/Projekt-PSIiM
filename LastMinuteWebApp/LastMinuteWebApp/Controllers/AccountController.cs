@@ -10,10 +10,12 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using LastMinuteWebApp.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace LastMinuteWebApp.Controllers
 {
     [Authorize]
+    [ValidateInput(false)]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -58,6 +60,13 @@ namespace LastMinuteWebApp.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            var userId = User.Identity.GetUserId<int>();
+            /*var userId = User.Identity.GetUserId<int>();
+              var user = UserManager.FindByIdAsync(userId);
+              if (user.Result.idClientBusiness == null)
+              {
+
+              }*/
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -400,6 +409,12 @@ namespace LastMinuteWebApp.Controllers
         // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult AccessDenied()
         {
             return View();
         }

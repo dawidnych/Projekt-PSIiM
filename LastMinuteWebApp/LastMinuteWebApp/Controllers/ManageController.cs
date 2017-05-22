@@ -11,6 +11,7 @@ using LastMinuteWebApp.Models;
 namespace LastMinuteWebApp.Controllers
 {
     [Authorize]
+    [ValidateInput(false)]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

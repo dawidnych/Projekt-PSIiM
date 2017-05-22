@@ -1,21 +1,52 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LastMinuteWebApp.Models
 {
+   
+
+    public class ClientBusinessAuthorizeAttribute : AuthorizeAttribute
+    {
+
+        private readonly ApplicationDbContext context = new ApplicationDbContext(); // my entity  
+        protected override bool AuthorizeCore(HttpContextBase httpContext)
+        {
+            base.AuthorizeCore(httpContext);
+            bool authorize = false;
+            var userId = HttpContext.Current.User.Identity.GetUserId<int>();
+
+            var user = context.Users.Where(m => m.Id == userId && m.idClientBusiness != null); // checking active users with allowed roles. 
+            if (user.Any())
+            {
+                authorize = true; /* return true if Entity has current user(active) with specific role */
+            }
+            return authorize;
+        }
+        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
+        {
+            filterContext.Result = new HttpUnauthorizedResult();
+        }
+    }
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
 
     public class ApplicationUser : IdentityUser<int, UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
     {
-        public Nullable<long> idClientBusiness { get; set; }
+        public long? idClientBusiness { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, int> manager)
         {
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            // Add custom user claims here => this.OrganizationId is a value stored in database against the user
+            userIdentity.AddClaim(new Claim("idClientBusiness", this.idClientBusiness.ToString()));
+
             return userIdentity;
         }
     }
