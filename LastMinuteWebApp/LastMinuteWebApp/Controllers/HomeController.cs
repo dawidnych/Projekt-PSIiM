@@ -5,61 +5,142 @@ using System.Web;
 using System.Web.Mvc;
 using LastMinuteWebApp.Models;
 using PagedList;
+using LastMinuteWebApp.Lucene;
+using LastMinuteWebApp.Repositories;
+using System.IO;
+using Microsoft.AspNet.Identity;
 
 namespace LastMinuteWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        GrouponDBEntities2 DbOffert = new GrouponDBEntities2();
+
+        GrouponDBEntities2 DBConnect = new GrouponDBEntities2();
 
 
-
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public ActionResult Index(string searchTerm, string searchCategory, int? page)
         {
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            SearchOffert.ClearLuceneIndex();
+            SearchOffert.AddUpdateLuceneIndex(DBConnect.Offert.ToList());
 
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
+            if (!Directory.Exists(SearchOffert._luceneDir))
+                Directory.CreateDirectory(SearchOffert._luceneDir);
 
-            ViewBag.CurrentFilter = searchString;
+            List<Offert> _searchResults = (string.IsNullOrEmpty(searchCategory)
+                           ? SearchOffert.Search(true, searchTerm)
+                           : SearchOffert.Search(true, searchTerm, searchCategory)).ToList();
 
+            if (string.IsNullOrEmpty(searchTerm) && !_searchResults.Any())
+                _searchResults = SearchOffert.GetAllIndexRecords().ToList();
 
-            var offerts = from s in DbOffert.Offert
-                           select s;
+            var _offerts = (from o in _searchResults
+                            where (o.deadlineTime > DateTime.Now && o.quantity > 0)
+                            select o).ToList();
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                offerts = offerts.Where(s => s.title.Contains(searchString));
-            }
+            var _searchCategoryList = new List<SearchCategoryItem> {
+                new SearchCategoryItem {Text = "(All Fields)", Value = ""},
+                new SearchCategoryItem {Text = "Title", Value = "title"},
+                new SearchCategoryItem {Text = "Description", Value = "description"},
+                new SearchCategoryItem {Text = "Price", Value = "price"},
+                new SearchCategoryItem {Text = "Quantity", Value = "quantity" },
+                new SearchCategoryItem {Text = "Deadline Time", Value = "deadlineTime" }
+            };
 
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    offerts = offerts.OrderByDescending(s => s.title);
-                    break;
-                case "Date":
-                    offerts = offerts.OrderBy(s => s.deadlineTime);
-                    break;
-                case "date_desc":
-                    offerts = offerts.OrderByDescending(s => s.deadlineTime);
-                    break;
-                default:
-                    offerts = offerts.OrderByDescending(s => s.price);
-                    break;
-            }
-
-            int pageSize = 8;
             int pageNumber = (page ?? 1);
-            return View(offerts.ToPagedList(pageNumber, pageSize));
+            int pageSize = 6;
 
+            return View(new SearchOffertViewModel
+            {
+                SearchResults = _offerts.ToPagedList(pageNumber, pageSize),
+                SearchCategoryList = _searchCategoryList,
+                SearchTerm = searchTerm,
+                SearchCategory = searchCategory
+            });
+
+        }
+
+        public ActionResult Search(string searchTerm, string searchCategory)
+        {
+            return RedirectToAction("Index", new { searchTerm, searchCategory });
+        }
+
+        [HttpPost]
+        public ActionResult Reserve(int offertId)
+        {
+            Offert offert = DBConnect.Offert.Find(offertId);
+            if (offert != null)
+            {
+                if (DateTime.Compare(offert.deadlineTime, DateTime.Now) > 0 && offert.quantity > 0)
+                {
+                    int clientPrivateId = User.Identity.GetUserId<Int32>();
+
+                    Random random = new Random();
+                    string chars = "abcde1234567890";
+                    string randomString = new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray());
+
+                    Reservation reservation = new Reservation
+                    {
+                        idClientPrivate = clientPrivateId,
+                        idOffert = offert.id,
+                        Code = randomString
+                    };
+                    DBConnect.Reservation.Add(reservation);
+
+                    offert.quantity -= 1;
+                    DBConnect.Offert.AsEnumerable().Where(o => o.id == offert.id).ToList().ForEach(o => o.quantity = offert.quantity);
+
+                    DBConnect.SaveChanges();
+                    SearchOffert.AddUpdateLuceneIndex(offert);
+
+                    TempData["message"] = "Reservation successful";
+                }
+                else
+                {
+                    TempData["error"] = "You can't reserve this offert because time is up or all tickets have beed reserved";
+                }
+            }
+
+            return RedirectToAction("MyReservations", "ClientPrivate");
+        }
+
+        [HttpPost]
+        public ActionResult AddToFavourites(int offertId)
+        {
+            Offert offert = DBConnect.Offert.Find(offertId);
+            if (offert != null)
+            {
+                if (DateTime.Compare(offert.deadlineTime, DateTime.Now) > 0 && offert.quantity > 0)
+                {
+                    int clientPrivateId = User.Identity.GetUserId<Int32>();
+
+                    var sameOffert = (from f in DBConnect.FavouriteOffert
+                                      where (f.idOffert == offert.id && f.idClientPrivate == clientPrivateId)
+                                      select f).ToList();
+
+                    if (!sameOffert.Any())
+                    {
+                        FavouriteOffert favourite = new FavouriteOffert
+                        {
+                            idClientPrivate = clientPrivateId,
+                            idOffert = offert.id
+                        };
+                        DBConnect.FavouriteOffert.Add(favourite);
+                        DBConnect.SaveChanges();
+
+                        TempData["message"] = "Successfully added to favourites";
+                    }
+                    else
+                    {
+                        TempData["error"] = "This offert is already in your favourites";
+                    }
+                }
+                else
+                {
+                    TempData["error"] = "You can't add this offert to favourites because time is up or all tickets have beed reserved";
+                }
+            }
+
+            return RedirectToAction("MyFavouriteOfferts", "ClientPrivate");
         }
 
         public ActionResult About()

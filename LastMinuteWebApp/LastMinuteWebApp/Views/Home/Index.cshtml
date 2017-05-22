@@ -1,7 +1,6 @@
-﻿@model PagedList.IPagedList<LastMinuteWebApp.Models.Offert>
-@using PagedList.Mvc;
-
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />    
+﻿@using LastMinuteWebApp.Models
+@model SearchOffertViewModel
+@using PagedList.Mvc;  
 
 @{
     ViewBag.Title = "Home Page";
@@ -15,63 +14,73 @@
 
 <h2>Offerts</h2>
 
-@using (Html.BeginForm("Index", "Home", FormMethod.Get))
+<div>
+    @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "form-inline", role = "form" }))
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.SearchTerm, "Phrase")
+            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", autocomplete = "off" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.SearchCategory, "Filter by")
+            @Html.DropDownListFor(m => m.SearchCategory,
+           Model.SearchCategoryList.Select(x => new SelectListItem { Text = x.Text, Value = x.Value }),
+           new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <div style="margin-top: 25px">
+                <input type="submit" value="Search" class="btn btn-default" />
+            </div>
+        </div>
+    }
+</div>
+<br />
+
+@if (Model.SearchResults.Any())
 {
-    <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
+    <table class="table">
+        <tr>
+            <th>Title</th>
+            <th>Descritpion</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Deadline time</th>
+            <th>Action</th>
+        </tr>
+
+        @foreach (var offert in Model.SearchResults)
+        {
+            <tr>
+                <td>@offert.title</td>
+                <td>@offert.description</td>
+                <td>@offert.price zł</td>
+                <td>@offert.quantity</td>
+                <td>@offert.deadlineTime</td>
+                <td>
+                    <div class="btn-group-vertical">
+                        @using (Html.BeginForm("Reserve", "Home"))
+                        {
+                            @Html.Hidden("OffertId", offert.id)
+                            <input type="submit" value="Reserve" class="btn btn-default" style="width: 100%" />
+                        }
+                        @using (Html.BeginForm("AddToFavourites", "Home"))
+                        {
+                            @Html.Hidden("OffertId", offert.id)
+                            <input type="submit" value="Like it" class="btn btn-default" style="width: 100%" />
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <text><br />No records found...<br /></text>
 }
 
-
-<table class="table">
-    <tr>
-       
-
-        <th>
-            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-            Description
-        </th>
-        <th>
-            Price
-        </th>
-        <th>
-            Quantity
-        </th>       
-        <th>
-            @Html.ActionLink("DeadlineTime", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>  
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.quantity)
-            </td>
-            <td>
-                @Html.ValueFor(modelItem => item.deadlineTime, "{0:dd/MM/yyyy}")
-            </td>
-
-        </tr>
-    }
-
-</table>
-
 <br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+Page @(Model.SearchResults.PageCount < Model.SearchResults.PageNumber ? 0 : Model.SearchResults.PageNumber) of @Model.SearchResults.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+@Html.PagedListPager(Model.SearchResults, page => Url.Action("Index", "Home",
+    new { Model.SearchTerm, Model.SearchCategory, page }))

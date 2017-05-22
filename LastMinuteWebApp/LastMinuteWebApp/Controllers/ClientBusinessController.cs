@@ -7,21 +7,21 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
+using Microsoft.AspNet.Identity;
 
 namespace LastMinuteWebApp.Controllers
 {
     public class ClientBusinessController : Controller
     {
-        // ToDo: currently logged in business client id
-        int constIdClientBusiness = 88;
 
         GrouponDBEntities2 DBConnect = new GrouponDBEntities2();
 
 
-
-        public ActionResult MyOfferts(string searchTerm, string searchCategory)
+        public ActionResult MyOfferts(string searchTerm, string searchCategory, int? page)
         {
-            SearchOffert.AddUpdateLuceneIndex(OffertRepository.GetAll());
+            SearchOffert.ClearLuceneIndex();
+            SearchOffert.AddUpdateLuceneIndex(DBConnect.Offert.ToList());
 
             if (!Directory.Exists(SearchOffert._luceneDir))
                 Directory.CreateDirectory(SearchOffert._luceneDir);
@@ -33,8 +33,12 @@ namespace LastMinuteWebApp.Controllers
             if (string.IsNullOrEmpty(searchTerm) && !_searchResults.Any())
                 _searchResults = SearchOffert.GetAllIndexRecords().ToList();
 
+            int clientPrivateId = User.Identity.GetUserId<Int32>();
+            ClientPrivate clientPrivate = DBConnect.ClientPrivate.Find(clientPrivateId);
+            int clientBusinessId = (int)clientPrivate.idClientBusiness;
+
             _searchResults = (from o in _searchResults
-                              where o.idClientBusiness == constIdClientBusiness
+                              where o.idClientBusiness == clientBusinessId
                               select o).ToList();
 
             var _searchCategoryList = new List<SearchCategoryItem> {
@@ -46,10 +50,15 @@ namespace LastMinuteWebApp.Controllers
                 new SearchCategoryItem {Text = "Deadline Time", Value = "deadlineTime" }
             };
 
+            int pageNumber = (page ?? 1);
+            int pageSize = 6;
+
             return View(new SearchOffertViewModel
             {
-                SearchResults = _searchResults,
-                SearchCategoryList = _searchCategoryList
+                SearchResults = _searchResults.ToPagedList(pageNumber, pageSize),
+                SearchCategoryList = _searchCategoryList,
+                SearchTerm = searchTerm,
+                SearchCategory = searchCategory
             });
         }
 
@@ -110,7 +119,11 @@ namespace LastMinuteWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                offert.idClientBusiness = constIdClientBusiness;
+                int clientPrivateId = User.Identity.GetUserId<Int32>();
+                ClientPrivate clientPrivate = DBConnect.ClientPrivate.Find(clientPrivateId);
+                int clientBusinessId = (int)clientPrivate.idClientBusiness;
+
+                offert.idClientBusiness = clientBusinessId;
                 DBConnect.Offert.Add(offert);
                 DBConnect.SaveChanges();
                 SearchOffert.AddUpdateLuceneIndex(offert);
