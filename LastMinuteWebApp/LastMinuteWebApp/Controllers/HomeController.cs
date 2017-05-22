@@ -64,6 +64,8 @@ namespace LastMinuteWebApp.Controllers
             return RedirectToAction("Index", new { searchTerm, searchCategory });
         }
 
+        [Authorize]
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult Reserve(int offertId)
         {
@@ -103,6 +105,8 @@ namespace LastMinuteWebApp.Controllers
             return RedirectToAction("MyReservations", "ClientPrivate");
         }
 
+        [Authorize]
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult AddToFavourites(int offertId)
         {
