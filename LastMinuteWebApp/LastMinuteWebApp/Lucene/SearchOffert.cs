@@ -79,7 +79,7 @@ namespace LastMinuteWebApp.Lucene
             }
         }
 
-        public static bool ClearLuceneIndex()
+        public static void ClearLuceneIndex()
         {
             try
             {
@@ -94,9 +94,7 @@ namespace LastMinuteWebApp.Lucene
             }
             catch (Exception)
             {
-                return false;
             }
-            return true;
         }
 
         public static void Optimize()

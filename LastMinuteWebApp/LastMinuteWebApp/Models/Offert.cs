@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
+
 namespace LastMinuteWebApp.Models
 {
     using System;
@@ -19,6 +21,7 @@ namespace LastMinuteWebApp.Models
 
         public int idClientBusiness { get; set; }
 
+        [AllowHtml]
         [Required(ErrorMessage = "This field is required")]
         public string description { get; set; }
 

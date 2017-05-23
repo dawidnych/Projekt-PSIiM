@@ -1,6 +1,8 @@
 ﻿using LastMinuteWebApp.Lucene;
 using LastMinuteWebApp.Models;
 using LastMinuteWebApp.Repositories;
+using Microsoft.AspNet.Identity;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,18 +12,18 @@ using System.Web.Mvc;
 
 namespace LastMinuteWebApp.Controllers
 {
+    [Authorize]
+    [ValidateInput(false)]
     public class ClientPrivateController : Controller
     {
-        // ToDo: currently logged in private client id
-        int constIdClientPrivate = 143;
 
         GrouponDBEntities2 DBConnect = new GrouponDBEntities2();
 
 
-
-        public ActionResult MyReservations(string searchTerm, string searchCategory)
+        public ActionResult MyReservations(string searchTerm, string searchCategory, int? page)
         {
-            SearchOffert.AddUpdateLuceneIndex(OffertRepository.GetAll());
+            SearchOffert.ClearLuceneIndex();
+            SearchOffert.AddUpdateLuceneIndex(DBConnect.Offert.ToList());
 
             if (!Directory.Exists(SearchOffert._luceneDir))
                 Directory.CreateDirectory(SearchOffert._luceneDir);
@@ -33,8 +35,10 @@ namespace LastMinuteWebApp.Controllers
             if (string.IsNullOrEmpty(searchTerm) && !searchResults.Any())
                 searchResults = SearchOffert.GetAllIndexRecords().ToList();
 
+            int clientPrivateId = User.Identity.GetUserId<Int32>();
+
             var reservations = (from r in DBConnect.Reservation
-                                where r.idClientPrivate == constIdClientPrivate
+                                where r.idClientPrivate == clientPrivateId
                                 select r).ToList();
 
             var _reservations = from r in reservations
@@ -49,10 +53,15 @@ namespace LastMinuteWebApp.Controllers
                 new SearchCategoryItem {Text = "Deadline Time", Value = "deadlineTime" }
             };
 
+            int pageNumber = (page ?? 1);
+            int pageSize = 6;
+
             return View(new SearchReservationViewModel
             {
-                Reservations = _reservations,
-                SearchCategoryList = _searchCategoryList
+                Reservations = _reservations.ToPagedList(pageNumber, pageSize),
+                SearchCategoryList = _searchCategoryList,
+                SearchTerm = searchTerm,
+                SearchCategory = searchCategory
             });
         }
 
@@ -76,9 +85,9 @@ namespace LastMinuteWebApp.Controllers
 
                         offert.quantity += 1;
                         DBConnect.Offert.AsEnumerable().Where(o => o.id == reservation.idOffert).ToList().ForEach(o => o.quantity = offert.quantity);
-                        SearchOffert.AddUpdateLuceneIndex(offert);
 
                         DBConnect.SaveChanges();
+                        SearchOffert.AddUpdateLuceneIndex(offert);
 
                         TempData["message"] = "Reservation cancelled";
                     }
@@ -94,9 +103,10 @@ namespace LastMinuteWebApp.Controllers
 
 
 
-        public ActionResult MyFavouriteOfferts(string searchTerm, string searchCategory)
+        public ActionResult MyFavouriteOfferts(string searchTerm, string searchCategory, int? page)
         {
-            SearchOffert.AddUpdateLuceneIndex(OffertRepository.GetAll());
+            SearchOffert.ClearLuceneIndex();
+            SearchOffert.AddUpdateLuceneIndex(DBConnect.Offert.ToList());
 
             if (!Directory.Exists(SearchOffert._luceneDir))
                 Directory.CreateDirectory(SearchOffert._luceneDir);
@@ -108,13 +118,15 @@ namespace LastMinuteWebApp.Controllers
             if (string.IsNullOrEmpty(searchTerm) && !searchResults.Any())
                 searchResults = SearchOffert.GetAllIndexRecords().ToList();
 
+            int clientPrivateId = User.Identity.GetUserId<Int32>();
+
             var favourites = (from f in DBConnect.FavouriteOffert
-                                where f.idClientPrivate == constIdClientPrivate
-                                select f).ToList();
+                              where f.idClientPrivate == clientPrivateId
+                              select f).ToList();
 
             var _favourites = from f in favourites
-                                join o in searchResults on f.idOffert equals o.id
-                                select new FavouriteOffertJoinOffert { FavouriteOffertData = f, OffertData = o };
+                              join o in searchResults on f.idOffert equals o.id
+                              select new FavouriteOffertJoinOffert { FavouriteOffertData = f, OffertData = o };
 
             var _searchCategoryList = new List<SearchCategoryItem> {
                 new SearchCategoryItem {Text = "(All Fields)", Value = ""},
@@ -125,10 +137,15 @@ namespace LastMinuteWebApp.Controllers
                 new SearchCategoryItem {Text = "Deadline Time", Value = "deadlineTime" }
             };
 
+            int pageNumber = (page ?? 1);
+            int pageSize = 6;
+
             return View(new SearchFavouriteOffertViewModel
             {
-                Favourites = _favourites,
-                SearchCategoryList = _searchCategoryList
+                Favourites = _favourites.ToPagedList(pageNumber, pageSize),
+                SearchCategoryList = _searchCategoryList,
+                SearchTerm = searchTerm,
+                SearchCategory = searchCategory
             });
         }
 
@@ -163,13 +180,15 @@ namespace LastMinuteWebApp.Controllers
                 {
                     if (DateTime.Compare(offert.deadlineTime, DateTime.Now) > 0 && offert.quantity > 0)
                     {
+                        int clientPrivateId = User.Identity.GetUserId<Int32>();
+
                         Random random = new Random();
-                        string chars = "abcde1234567890";
-                        string randomString = new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray());
+                        string chars = "1234567890";
+                        string randomString = new string(Enumerable.Repeat(chars, 4).Select(s => s[random.Next(s.Length)]).ToArray());
 
                         Reservation reservation = new Reservation
                         {
-                            idClientPrivate = constIdClientPrivate,
+                            idClientPrivate = clientPrivateId,
                             idOffert = offert.id,
                             Code = randomString
                         };
@@ -177,9 +196,9 @@ namespace LastMinuteWebApp.Controllers
 
                         offert.quantity -= 1;
                         DBConnect.Offert.AsEnumerable().Where(o => o.id == favouriteOffert.idOffert).ToList().ForEach(o => o.quantity = offert.quantity);
-                        SearchOffert.AddUpdateLuceneIndex(offert);
 
                         DBConnect.SaveChanges();
+                        SearchOffert.AddUpdateLuceneIndex(offert);
 
                         TempData["message"] = "Reservation successful";
                     }

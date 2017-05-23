@@ -1,5 +1,6 @@
 ﻿@using LastMinuteWebApp.Models
 @model SearchFavouriteOffertViewModel
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "My Favourite Offerts";
 }
@@ -59,7 +60,7 @@
                 <td>@favourite.OffertData.title</td>
                 <td>@favourite.OffertData.description</td>
                 <td>@favourite.OffertData.price zł</td>
-                
+
                 @if (favourite.OffertData.quantity > 0)
                 {
                     <td>@favourite.OffertData.quantity</td>
@@ -79,24 +80,26 @@
                 }
 
                 <td>
-                    @if (favourite.OffertData.quantity > 0 && DateTime.Compare(favourite.OffertData.deadlineTime, DateTime.Now) > 0)
-                    {
-                        using (Html.BeginForm("ReserveOffert", "ClientPrivate"))
+                    <div class="btn-group-vertical">
+                        @if (favourite.OffertData.quantity > 0 && DateTime.Compare(favourite.OffertData.deadlineTime, DateTime.Now) > 0)
+                        {
+                            using (Html.BeginForm("ReserveOffert", "ClientPrivate"))
+                            {
+                                @Html.Hidden("FavouriteOffertId", favourite.FavouriteOffertData.id)
+                                <input type="submit" value="Reserve" class="btn btn-default" style="width: 100%" />
+                            }
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-default disabled" style="width: 100%">Reserve</button>
+                        }
+
+                        @using (Html.BeginForm("DeleteOffert", "ClientPrivate"))
                         {
                             @Html.Hidden("FavouriteOffertId", favourite.FavouriteOffertData.id)
-                            <input type="submit" value="Reserve" class="btn btn-default btn-block" />
+                            <input type="submit" value="Remove" class="btn btn-default" style="width: 100%" />
                         }
-                    }
-                    else
-                    {
-                        <button type="button" class="btn btn-default disabled btn-block">Reserve</button>
-                    }
-
-                    @using (Html.BeginForm("DeleteOffert", "ClientPrivate"))
-                    {
-                        @Html.Hidden("FavouriteOffertId", favourite.FavouriteOffertData.id)
-                        <input type="submit" value="Delete" class="btn btn-default btn-block" />
-                    }
+                    </div>
                 </td>
             </tr>
         }
@@ -106,3 +109,9 @@ else
 {
     <text><br />No records found...<br /></text>
 }
+
+<br />
+Page @(Model.Favourites.PageCount < Model.Favourites.PageNumber ? 0 : Model.Favourites.PageNumber) of @Model.Favourites.PageCount
+
+@Html.PagedListPager(Model.Favourites, page => Url.Action("MyFavouriteOfferts", "ClientPrivate",
+    new { Model.SearchTerm, Model.SearchCategory, page }))

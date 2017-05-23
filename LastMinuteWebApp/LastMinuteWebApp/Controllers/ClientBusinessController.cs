@@ -1,6 +1,8 @@
 ﻿using LastMinuteWebApp.Lucene;
 using LastMinuteWebApp.Models;
 using LastMinuteWebApp.Repositories;
+using Microsoft.AspNet.Identity;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,18 +12,19 @@ using System.Web.Mvc;
 
 namespace LastMinuteWebApp.Controllers
 {
+    [Authorize]
+    [ClientBusinessAuthorizeAttribute]
+    [ValidateInput(false)]
     public class ClientBusinessController : Controller
     {
-        // ToDo: currently logged in business client id
-        int constIdClientBusiness = 88;
 
         GrouponDBEntities2 DBConnect = new GrouponDBEntities2();
 
 
-
-        public ActionResult MyOfferts(string searchTerm, string searchCategory)
+        public ActionResult MyOfferts(string searchTerm, string searchCategory, int? page)
         {
-            SearchOffert.AddUpdateLuceneIndex(OffertRepository.GetAll());
+            SearchOffert.ClearLuceneIndex();
+            SearchOffert.AddUpdateLuceneIndex(DBConnect.Offert.ToList());
 
             if (!Directory.Exists(SearchOffert._luceneDir))
                 Directory.CreateDirectory(SearchOffert._luceneDir);
@@ -33,8 +36,12 @@ namespace LastMinuteWebApp.Controllers
             if (string.IsNullOrEmpty(searchTerm) && !_searchResults.Any())
                 _searchResults = SearchOffert.GetAllIndexRecords().ToList();
 
+            int clientPrivateId = User.Identity.GetUserId<Int32>();
+            ClientPrivate clientPrivate = DBConnect.ClientPrivate.Find(clientPrivateId);
+            int clientBusinessId = (int)clientPrivate.idClientBusiness;
+
             _searchResults = (from o in _searchResults
-                              where o.idClientBusiness == constIdClientBusiness
+                              where o.idClientBusiness == clientBusinessId
                               select o).ToList();
 
             var _searchCategoryList = new List<SearchCategoryItem> {
@@ -46,10 +53,15 @@ namespace LastMinuteWebApp.Controllers
                 new SearchCategoryItem {Text = "Deadline Time", Value = "deadlineTime" }
             };
 
+            int pageNumber = (page ?? 1);
+            int pageSize = 6;
+
             return View(new SearchOffertViewModel
             {
-                SearchResults = _searchResults,
-                SearchCategoryList = _searchCategoryList
+                SearchResults = _searchResults.ToPagedList(pageNumber, pageSize),
+                SearchCategoryList = _searchCategoryList,
+                SearchTerm = searchTerm,
+                SearchCategory = searchCategory
             });
         }
 
@@ -67,9 +79,9 @@ namespace LastMinuteWebApp.Controllers
                 if (DateTime.Compare(offert.deadlineTime, DateTime.Now) > 0)
                 {
                     var reservations = (from r in DBConnect.Reservation
-                                       where r.idOffert == offert.id
-                                       select r).ToList();
-                    foreach(var reservation in reservations)
+                                        where r.idOffert == offert.id
+                                        select r).ToList();
+                    foreach (var reservation in reservations)
                     {
                         DBConnect.Reservation.Remove(reservation);
                     }
@@ -77,7 +89,7 @@ namespace LastMinuteWebApp.Controllers
                     var favourites = (from f in DBConnect.FavouriteOffert
                                       where f.idOffert == offert.id
                                       select f).ToList();
-                    foreach(var favourite in favourites)
+                    foreach (var favourite in favourites)
                     {
                         DBConnect.FavouriteOffert.Remove(favourite);
                     }
@@ -110,7 +122,11 @@ namespace LastMinuteWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                offert.idClientBusiness = constIdClientBusiness;
+                int clientPrivateId = User.Identity.GetUserId<Int32>();
+                ClientPrivate clientPrivate = DBConnect.ClientPrivate.Find(clientPrivateId);
+                int clientBusinessId = (int)clientPrivate.idClientBusiness;
+
+                offert.idClientBusiness = clientBusinessId;
                 DBConnect.Offert.Add(offert);
                 DBConnect.SaveChanges();
                 SearchOffert.AddUpdateLuceneIndex(offert);
