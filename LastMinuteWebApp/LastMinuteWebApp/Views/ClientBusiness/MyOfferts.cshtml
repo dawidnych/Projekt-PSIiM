@@ -1,6 +1,6 @@
 ﻿@using LastMinuteWebApp.Models
 @model SearchOffertViewModel
-
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "My Offerts";
 }
@@ -25,7 +25,7 @@
     {
         <div class="form-group">
             @Html.LabelFor(m => m.SearchTerm, "Phrase")
-            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", autocomplete = "off"})
+            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", autocomplete = "off" })
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.SearchCategory, "Filter by")
@@ -58,7 +58,7 @@
         {
             <tr>
                 <td>@offert.title</td>
-                <td>@Html.Raw(@offert.description)</td>
+                <td>@offert.description</td>
                 <td>@offert.price zł</td>
                 <td>@offert.quantity</td>
                 @if (DateTime.Compare(offert.deadlineTime, DateTime.Now) > 0)
@@ -68,7 +68,7 @@
                         @using (Html.BeginForm("DeleteOffert", "ClientBusiness"))
                         {
                             @Html.Hidden("OffertId", offert.id)
-                            <input type="submit" value="Delete" class="btn btn-default" />
+                            <input type="submit" value="Delete" class="btn btn-default" style="width: 100%" />
                         }
                     </td>
                 }
@@ -76,7 +76,7 @@
                 {
                     <td style="color: red">@offert.deadlineTime</td>
                     <td>
-                        <button type="button" class="btn btn-default disabled">Delete</button>
+                        <button type="button" class="btn btn-default disabled" style="width: 100%">Delete</button>
                     </td>
                 }
             </tr>
@@ -88,3 +88,8 @@ else
     <text><br />No records found...<br /></text>
 }
 
+<br />
+Page @(Model.SearchResults.PageCount < Model.SearchResults.PageNumber ? 0 : Model.SearchResults.PageNumber) of @Model.SearchResults.PageCount
+
+@Html.PagedListPager(Model.SearchResults, page => Url.Action("MyOfferts", "ClientBusiness",
+    new { Model.SearchTerm, Model.SearchCategory, page }))

@@ -1,5 +1,6 @@
 ﻿@using LastMinuteWebApp.Models
 @model SearchReservationViewModel
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "My Reservations";
 }
@@ -67,7 +68,7 @@
                         @using (Html.BeginForm("DeleteReservation", "ClientPrivate"))
                         {
                             @Html.Hidden("ReservationId", reservation.ReservationData.id)
-                            <input type="submit" value="Cancel" class="btn btn-default"/>
+                            <input type="submit" value="Cancel" class="btn btn-default" style="width: 100%" />
                         }
                     </td>
                 }
@@ -75,7 +76,7 @@
                 {
                     <td style="color: red">@reservation.OffertData.deadlineTime</td>
                     <td>
-                        <button type="button" class="btn btn-default disabled">Cancel</button>
+                        <button type="button" class="btn btn-default disabled" style="width: 100%">Cancel</button>
                     </td>
                 }
             </tr>
@@ -86,3 +87,9 @@ else
 {
     <text><br />No records found...<br /></text>
 }
+
+<br />
+Page @(Model.Reservations.PageCount < Model.Reservations.PageNumber ? 0 : Model.Reservations.PageNumber) of @Model.Reservations.PageCount
+
+@Html.PagedListPager(Model.Reservations, page => Url.Action("MyReservations", "ClientPrivate",
+    new { Model.SearchTerm, Model.SearchCategory, page }))
