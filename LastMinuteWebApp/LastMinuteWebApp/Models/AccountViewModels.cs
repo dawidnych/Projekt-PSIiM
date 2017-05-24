@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Foolproof;
 
 namespace LastMinuteWebApp.Models
 {
@@ -57,13 +58,17 @@ namespace LastMinuteWebApp.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
-
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
 
     public class RegisterViewModel
     {
+        public RegisterViewModel()
+        {
+            Business = false;
+        }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -79,6 +84,22 @@ namespace LastMinuteWebApp.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public bool Business { get; set; }
+
+        [RequiredIfTrue("Business")]
+        [Display(Name = "Description")]
+        public string description { get; set; }
+
+        [RequiredIfTrue("Business")]
+        [StringLength(10, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 10)]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "NIP must be numeric")]
+        [Display(Name = "NIP")]
+        public string NIP { get; set; }
+
+        [RequiredIfTrue("Business")]
+        [Display(Name = "Title")]
+        public string title { get; set; }
     }
 
     public class ResetPasswordViewModel

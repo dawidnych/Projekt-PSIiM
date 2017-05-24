@@ -11,7 +11,7 @@ namespace LastMinuteWebApp.Extensions
     {
         public static string GetidClientBusiness(this IIdentity identity)
         {
-            var claim = ((ClaimsIdentity) identity).FindFirst("idClientBusiness");
+            var claim = ((ClaimsIdentity)identity).FindFirst("idClientBusiness");
             // Test for null to avoid issues during local testing
             return (claim != null) ? claim.Value : string.Empty;
         }

@@ -26,7 +26,31 @@
     <div class="form-group">
         @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control"})
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+    </div>
+    /*Bisness*/
+    <div class="form-group">
+        <input id="Business" name="Business" type="checkbox" value="true"/>
+        <label for="Business" class="col-md-2 control-label">Business Account</label>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.title, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.title, new { @class = "form-control", id = "title", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.NIP, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.NIP, new { @class = "form-control", id = "NIP", disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.description, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.description, new { @class = "form-control", id = "description", disabled = "disabled" })
         </div>
     </div>
     <div class="form-group">
@@ -36,6 +60,14 @@
     </div>
 }
 
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $("#Business").click(function () {
+            $('#title').attr("disabled", !$(this).is(':checked'));
+            $('#NIP').attr("disabled", !$(this).is(':checked'));
+            $('#description').attr("disabled", !$(this).is(':checked'));
+        });
+    </script>
 }

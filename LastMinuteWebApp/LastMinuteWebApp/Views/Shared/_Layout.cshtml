@@ -26,7 +26,8 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li> 
-                    @if (User.Identity.IsClientBusiness())
+                    
+                    @if (!User.Identity.GetidClientBusiness().IsEmpty())
                     {
                         <li>@Html.ActionLink("My Offerts", "MyOfferts", "ClientBusiness")</li>
                         <li>@Html.ActionLink("Add Offert", "AddOffert", "ClientBusiness")</li>
@@ -34,6 +35,7 @@
 
                     @if (User.Identity.IsAuthenticated)
                     {
+
                         <li>@Html.ActionLink("My Reservations", "MyReservations", "ClientPrivate")</li>
                         <li>@Html.ActionLink("My Favourite Offerts", "MyFavouriteOfferts", "ClientPrivate")</li>
                     }
