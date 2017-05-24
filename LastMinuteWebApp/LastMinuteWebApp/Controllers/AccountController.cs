@@ -20,6 +20,7 @@ namespace LastMinuteWebApp.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private GrouponDBEntities2 DBConnect = new GrouponDBEntities2();
 
         public AccountController()
         {
@@ -158,14 +159,25 @@ namespace LastMinuteWebApp.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
-        {
+        {         
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email};
+                if (model.Business)
+                {
+                    var newBusiness = new ClientBusiness { title = model.title, NIP = model.NIP, description = model.description};
+
+                    DBConnect.ClientBusiness.Add(newBusiness);
+                    DBConnect.SaveChanges();
+                    var business = DBConnect.ClientBusiness.Single(n => n.NIP == newBusiness.NIP);
+                    user.idClientBusiness = business.id;
+                }
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -176,6 +188,7 @@ namespace LastMinuteWebApp.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
+                
             }
 
             // If we got this far, something failed, redisplay form
