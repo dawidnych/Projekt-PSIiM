@@ -1,0 +1,66 @@
+﻿@model LastMinuteWebApp.Models.Offert
+
+@{
+    ViewBag.Title = "ReservationDiteils";
+}
+
+<h2>ReservationDiteils</h2>
+
+<div>
+    @Html.Hidden("OffertId", Model.id)
+    <h4>Offert</h4>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.idClientBusiness)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.idClientBusiness)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.deadlineTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.deadlineTime)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index", "Home")
+</p>

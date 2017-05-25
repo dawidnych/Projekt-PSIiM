@@ -101,7 +101,26 @@ namespace LastMinuteWebApp.Controllers
             return RedirectToAction("MyReservations");
         }
 
+        public ActionResult ReservationDiteils(int offertId)
+        {
+            Offert offert = DBConnect.Offert.Find(offertId);
+            
+                
+                if (offert != null)
+                {
+                    if (DateTime.Compare(offert.deadlineTime, DateTime.Now) > 0)
+                    {
+                        return View(offert);
+                    }
+                    else
+                    {
+                        TempData["error"] = "Deadline time is up. You can't see detils of the offert";
+                    }
+                }
+            
 
+            return RedirectToAction("Index", "Home");
+        }
 
         public ActionResult MyFavouriteOfferts(string searchTerm, string searchCategory, int? page)
         {

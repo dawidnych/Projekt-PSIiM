@@ -68,6 +68,7 @@
                             @Html.Hidden("OffertId", offert.id)
                             <input type="submit" value="Like it" class="btn btn-default" style="width: 100%" />
                         }
+                        @Html.ActionLink("Diteils","ReservationDiteils", "ClientPrivate", new { offertId = offert.id}, new { @class = "btn btn-default", style = "width: 100%" })
                     </div>
                 </td>
             </tr>
