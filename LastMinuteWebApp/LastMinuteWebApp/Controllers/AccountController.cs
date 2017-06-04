@@ -171,6 +171,7 @@ namespace LastMinuteWebApp.Controllers
                     DBConnect.SaveChanges();
                     var business = DBConnect.ClientBusiness.Single(n => n.NIP == newBusiness.NIP);
                     user.idClientBusiness = business.id;
+                       
                 }
 
                 var result = await UserManager.CreateAsync(user, model.Password);
