@@ -7,37 +7,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 namespace LastMinuteWebApp.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Offert
     {
         public long id { get; set; }
-
         public int idClientBusiness { get; set; }
-
-        [AllowHtml]
-        [Required(ErrorMessage = "This field is required")]
         public string description { get; set; }
-
-        [Required(ErrorMessage = "This field is required")]
         public string title { get; set; }
-
-        [Required(ErrorMessage = "This field is required")]
-        [Range(1, long.MaxValue, ErrorMessage = "Please enter a valid number")]
         public long price { get; set; }
-
-        [Required(ErrorMessage = "This field is required")]
-        [Range(1, long.MaxValue, ErrorMessage = "Please enter a valid number")]
         public long quantity { get; set; }
-
-        [Required(ErrorMessage = "This field is required")]
-        [DataType(DataType.Date, ErrorMessage = "Please enter a date")]
         public System.DateTime deadlineTime { get; set; }
     }
 }

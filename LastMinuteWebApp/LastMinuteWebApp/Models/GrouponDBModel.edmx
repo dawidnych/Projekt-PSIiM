@@ -10,7 +10,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="description" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="1000" Nullable="false" />
           <Property Name="NIP" Type="varchar" MaxLength="12" Nullable="false" />
           <Property Name="title" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
@@ -22,6 +22,15 @@
           <Property Name="email" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="haslo" Type="longtext" Nullable="false" />
           <Property Name="idClientBusiness" Type="uint" />
+          <Property Name="EmailConfirmed" Type="bool" Nullable="false" />
+          <Property Name="SecurityStamp" Type="longtext" />
+          <Property Name="PhoneNumber" Type="longtext" />
+          <Property Name="PhoneNumberConfirmed" Type="bool" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bool" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" Precision="0" />
+          <Property Name="LockoutEnabled" Type="bool" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="FavouriteClientBusiness">
           <Key>
@@ -47,9 +56,9 @@
           <Property Name="idClientBusiness" Type="int" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="1000" Nullable="false" />
           <Property Name="title" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="price" Type="uint" Nullable="false" />
+          <Property Name="price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="quantity" Type="uint" Nullable="false" />
-          <Property Name="deadlineTime" Type="date" Nullable="false" />
+          <Property Name="deadlineTime" Type="datetime" Precision="0" Nullable="false" />
         </EntityType>
         <EntityType Name="Reservation">
           <Key>
@@ -58,7 +67,8 @@
           <Property Name="id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idClientPrivate" Type="uint" Nullable="false" />
           <Property Name="idOffert" Type="uint" Nullable="false" />
-          <Property Name="Code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="100" />
+          <Property Name="active" Type="int" Nullable="false" />
         </EntityType>
         <EntityContainer Name="GrouponDBModelStoreContainer">
           <EntitySet Name="ClientBusiness" EntityType="Self.ClientBusiness" Schema="GrouponDB" store:Type="Tables" />
@@ -89,6 +99,15 @@
           <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="haslo" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="idClientBusiness" Type="Int64" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="FavouriteClientBusiness">
           <Key>
@@ -126,6 +145,7 @@
           <Property Name="idClientPrivate" Type="Int64" Nullable="false" />
           <Property Name="idOffert" Type="Int64" Nullable="false" />
           <Property Name="Code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="active" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityContainer Name="GrouponDBEntities2" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ClientBusiness" EntityType="Self.ClientBusiness" />
@@ -154,6 +174,15 @@
           <EntitySetMapping Name="ClientPrivate">
             <EntityTypeMapping TypeName="GrouponDBModel.ClientPrivate">
               <MappingFragment StoreEntitySet="ClientPrivate">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="haslo" ColumnName="haslo" />
@@ -195,6 +224,7 @@
           <EntitySetMapping Name="Reservation">
             <EntityTypeMapping TypeName="GrouponDBModel.Reservation">
               <MappingFragment StoreEntitySet="Reservation">
+                <ScalarProperty Name="active" ColumnName="active" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="idClientPrivate" ColumnName="idClientPrivate" />
                 <ScalarProperty Name="idOffert" ColumnName="idOffert" />

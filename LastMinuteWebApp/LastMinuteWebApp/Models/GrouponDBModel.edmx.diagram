@@ -6,9 +6,9 @@
     <edmx:Diagrams>
       <Diagram DiagramId="30950297341c482ebb0a2779f11b8b33" Name="Diagram1">
         <EntityTypeShape EntityType="GrouponDBModel.ClientBusiness" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="GrouponDBModel.ClientPrivate" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrouponDBModel.ClientPrivate" Width="1.5" PointX="2.625" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="GrouponDBModel.FavouriteClientBusiness" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="GrouponDBModel.FavouriteOffert" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrouponDBModel.FavouriteOffert" Width="1.5" PointX="2.625" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="GrouponDBModel.Offert" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="GrouponDBModel.Reservation" Width="2.75" PointX="4.875" PointY="3.625" IsExpanded="true" />
       </Diagram>

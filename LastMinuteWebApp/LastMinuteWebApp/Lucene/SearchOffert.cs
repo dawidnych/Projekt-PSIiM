@@ -117,7 +117,7 @@ namespace LastMinuteWebApp.Lucene
                 description = doc.Get("description"),
                 title = doc.Get("title"),
                 price = Convert.ToInt64(doc.Get("price")),
-                quantity = Convert.ToInt64(doc.Get("quantity")),
+                quantity = Convert.ToUInt32(doc.Get("quantity")),
                 deadlineTime = Convert.ToDateTime(doc.Get("deadlineTime"))
             };
         }

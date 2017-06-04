@@ -18,5 +18,6 @@ namespace LastMinuteWebApp.Models
         public long idClientPrivate { get; set; }
         public long idOffert { get; set; }
         public string Code { get; set; }
+        public int active { get; set; }
     }
 }
