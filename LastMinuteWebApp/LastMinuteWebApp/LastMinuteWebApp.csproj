@@ -254,6 +254,7 @@
     <Compile Include="Models\ClientPrivate.cs">
       <DependentUpon>GrouponDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EventManagerViewModel.cs" />
     <Compile Include="Models\FavouriteClientBusiness.cs">
       <DependentUpon>GrouponDBModel.tt</DependentUpon>
     </Compile>
@@ -545,6 +546,7 @@
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce-small.ttf" />
     <Content Include="Scripts\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
     <Content Include="Scripts\tinymce\langs\readme.md" />
+    <Content Include="Views\ClientBusiness\OffertManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

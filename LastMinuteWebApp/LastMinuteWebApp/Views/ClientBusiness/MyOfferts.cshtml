@@ -70,7 +70,9 @@
                             @Html.Hidden("OffertId", offert.id)
                             <input type="submit" value="Delete" class="btn btn-default" style="width: 100%" />
                         }
+                       @Html.ActionLink("Manage", "OffertManager", new { offerId = offert.id }, new { @class = "btn btn-default", style = "width: 100%" })
                     </td>
+
                 }
                 else
                 {
@@ -79,6 +81,7 @@
                         <button type="button" class="btn btn-default disabled" style="width: 100%">Delete</button>
                     </td>
                 }
+                
             </tr>
         }
     </table>

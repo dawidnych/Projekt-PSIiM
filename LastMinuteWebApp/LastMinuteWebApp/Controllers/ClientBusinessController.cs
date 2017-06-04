@@ -20,6 +20,37 @@ namespace LastMinuteWebApp.Controllers
 
         GrouponDBEntities2 DBConnect = new GrouponDBEntities2();
 
+        public ActionResult OffertManager(int offerId, string searchString)
+        {
+            var query =
+                DBConnect.ClientPrivate.Join(DBConnect.Reservation, c => c.id, r => r.idClientPrivate,
+                    (c, r) => new {ClientPrivate = c, Reservation = r}).Where(r=>r.Reservation.idOffert.Equals(offerId));
+
+            List<ReservationClientViewModel> reservationModels = new List<ReservationClientViewModel>();
+
+            foreach (var q in query)
+            {
+                reservationModels.Add(new ReservationClientViewModel {client = q.ClientPrivate, reservation = q.Reservation});
+            }
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                reservationModels = reservationModels.Where(s => s.reservation.Code.Contains(searchString) || s.client.UserName.Contains(searchString)).ToList();
+            }
+
+            EventManagerViewModel model = new EventManagerViewModel();
+            model.offert = DBConnect.Offert.First(o => o.id.Equals(offerId));
+            model.reservations = reservationModels;
+            return View(model);
+        }
+
+        public ActionResult BookReservation(int rezervationId, int Id)
+        {
+            var rezervation = DBConnect.Reservation.First(r => r.id.Equals(rezervationId));
+            rezervation.active = 1;
+            DBConnect.SaveChanges();
+            return RedirectToAction("OffertManager", new { offerId = Id});
+        }
 
         public ActionResult MyOfferts(string searchTerm, string searchCategory, int? page)
         {
