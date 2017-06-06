@@ -340,6 +340,10 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="lucene_index\segments.gen" />
+    <Content Include="lucene_index\segments_ft" />
+    <Content Include="lucene_index\_bq.cfs" />
+    <None Include="Properties\PublishProfiles\LastMinuteWebApp - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\LastMinuteWebApp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -347,6 +351,8 @@
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery.datetimepicker.full.js" />
+    <Content Include="Scripts\jquery.datetimepicker.full.min.js" />
     <Content Include="Scripts\jquery.datetimepicker.js" />
     <Content Include="Scripts\jquery.datetimepicker.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

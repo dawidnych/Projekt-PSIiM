@@ -58,7 +58,7 @@
         {
             <tr>
                 <td>@offert.title</td>
-                <td>@offert.description</td>
+                <td>@Html.Raw(offert.description)</td>
                 <td>@offert.price zł</td>
                 <td>@offert.quantity</td>
                 @if (DateTime.Compare(offert.deadlineTime, DateTime.Now) > 0)
