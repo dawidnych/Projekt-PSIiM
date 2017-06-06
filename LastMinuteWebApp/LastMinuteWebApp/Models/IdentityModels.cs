@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
 
 namespace LastMinuteWebApp.Models
 {
@@ -99,6 +101,8 @@ namespace LastMinuteWebApp.Models
             context.Database.CreateIfNotExists();
             return context;
         }
+
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

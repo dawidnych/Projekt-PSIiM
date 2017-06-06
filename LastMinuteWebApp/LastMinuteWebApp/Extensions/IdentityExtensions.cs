@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
+using System.Web.Mvc;
 
 namespace LastMinuteWebApp.Extensions
 {
@@ -23,4 +24,5 @@ namespace LastMinuteWebApp.Extensions
             return (claim != null);
         }
     }
+
 }

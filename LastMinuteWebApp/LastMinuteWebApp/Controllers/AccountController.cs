@@ -61,7 +61,7 @@ namespace LastMinuteWebApp.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            var userId = User.Identity.GetUserId<int>();
+             var userId = User.Identity.GetUserId<int>();
             /*var userId = User.Identity.GetUserId<int>();
               var user = UserManager.FindByIdAsync(userId);
               if (user.Result.idClientBusiness == null)

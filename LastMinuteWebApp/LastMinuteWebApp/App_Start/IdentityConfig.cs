@@ -132,4 +132,6 @@ namespace LastMinuteWebApp
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
     }
+
+
 }
