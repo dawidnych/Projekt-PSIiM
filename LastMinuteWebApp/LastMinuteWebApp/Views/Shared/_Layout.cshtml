@@ -1,4 +1,5 @@
 ﻿@using LastMinuteWebApp.Extensions
+@using Microsoft.AspNet.Identity
 
 <!DOCTYPE html>
 <html>
@@ -27,6 +28,8 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li> 
                     
+                    
+
                     @if (!User.Identity.GetidClientBusiness().IsEmpty())
                     {
                         <li>@Html.ActionLink("My Offerts", "MyOfferts", "ClientBusiness")</li>
@@ -38,6 +41,11 @@
 
                         <li>@Html.ActionLink("My Reservations", "MyReservations", "ClientPrivate")</li>
                         <li>@Html.ActionLink("My Favourite Offerts", "MyFavouriteOfferts", "ClientPrivate")</li>
+                    }
+                    
+                    @if (User.Identity.GetUserName().Equals("admin@example.com"))
+                    {
+                        <li>@Html.ActionLink("Admin panel", "Index", "Admin")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

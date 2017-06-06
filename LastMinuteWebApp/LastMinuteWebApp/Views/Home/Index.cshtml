@@ -1,4 +1,5 @@
 ﻿@using LastMinuteWebApp.Models
+@using Microsoft.AspNet.Identity
 @model SearchOffertViewModel
 @using PagedList.Mvc;
 
@@ -68,7 +69,8 @@
                             @Html.Hidden("OffertId", offert.id)
                             <input type="submit" value="Like it" class="btn btn-default" style="width: 100%" />
                         }
-                        @Html.ActionLink("Details", "ReservationDiteils", "ClientPrivate", new { offertId = offert.id}, new { @class = "btn btn-default", style = "width: 100%" })
+                        @Html.ActionLink("Details", "ReservationDiteils", "ClientPrivate", new { offertId = offert.id }, new { @class = "btn btn-default", style = "width: 100%" })
+
                     </div>
                 </td>
             </tr>
