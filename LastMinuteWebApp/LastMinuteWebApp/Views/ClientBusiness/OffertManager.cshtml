@@ -58,38 +58,47 @@
       
         
     </div>
-    <table class="table">
-        <tr>
-            <th>User Email</th>
-            <th>Code</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-
-        @foreach (var rezervation in Model.reservations)
+    <div>
+        @using (Html.BeginForm("OffertManager" ,"ClientBusiness", new { offerId = Model.offert.id } ))
         {
-            if (rezervation.reservation.active == 1)
-            {
-                <tr class="success">
-                    <td>@rezervation.client.UserName</td>
-                    <td>@rezervation.reservation.Code</td>
-                    <td>Booked</td>
-                    <td></td>
-                </tr>
-            }
-            else
-            {
-                <tr>
-                    <td>@rezervation.client.UserName</td>
-                    <td>@rezervation.reservation.Code</td>
-                    <td>Awaits</td>
-                    <td>@Html.ActionLink("Book", "BookReservation", "ClientBusiness", new { rezervationId = rezervation.reservation.id, Id = Model.offert.id }, new { @class = "btn btn-default", style = "width: 100%" })</td>
-                </tr>
-            }
+            <input type="text" id="test" name="searchString" value="" />
+            <input type ="submit" class = "btn btn-default" value="Search code/user" />
         }
-    </table>
+    </div>
 
-</div>
+
+        <table class="table">
+            <tr>
+                <th>User Email</th>
+                <th>Code</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+
+            @foreach (var rezervation in Model.reservations)
+            {
+                if (rezervation.reservation.active == 1)
+                {
+                    <tr class="success">
+                        <td>@rezervation.client.UserName</td>
+                        <td>@rezervation.reservation.Code</td>
+                        <td>Booked</td>
+                        <td></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@rezervation.client.UserName</td>
+                        <td>@rezervation.reservation.Code</td>
+                        <td>Awaits</td>
+                        <td>@Html.ActionLink("Book", "BookReservation", "ClientBusiness", new { rezervationId = rezervation.reservation.id, Id = Model.offert.id }, new { @class = "btn btn-default", style = "width: 100%" })</td>
+                    </tr>
+                }
+            }
+        </table>
+
+    </div>
 <p>
     @Html.ActionLink("Back to List", "Index", "Home")
 </p>
